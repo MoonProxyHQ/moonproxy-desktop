@@ -113,6 +113,11 @@ Moonbox only manages the frpc client side — you must supply your own frps serv
 ① self-host a machine with a public IP (a 1 vCPU / 2GB cloud VPS is enough); ② use a community-public frps node
 (evaluate trust and security yourself); ③ deploy a lightweight frps on serverless / cloud functions.
 
+### Is the traffic exposed via Moonbox secure?
+
+Security is provided by the frp protocol itself: communication uses TCP/TLS or KCP encryption, and authentication tokens are held by you. Moonbox does not store or relay your application data — configs and tokens live only on your machine.
+Best practices: ① use a strong per-rule token; ② enable TLS encryption in `frpc.toml` (`transport.tls.force = true`); ③ enable the `allowUsers` whitelist on frps; ④ restrict exposed ports on the public side with a firewall.
+
 ### How does Moonbox differ from ZeroTier / Tailscale?
 
 They cover different needs. ZeroTier / Tailscale are full-device mesh VPNs that pull all traffic into a virtual LAN;

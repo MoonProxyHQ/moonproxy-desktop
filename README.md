@@ -73,6 +73,47 @@
 
 > 简言之：**frp 提供「能力」，Moonbox Desktop 提供「易用性」。**
 
+## 常见问题
+
+### 灵机魔盒是什么？
+
+灵机魔盒（英文名 **Moonbox**）是一款跨平台 **FRP（Fast Reverse Proxy）内网穿透桌面客户端**，基于 [Tauri v2](https://tauri.app) 打造，面向非技术用户。
+它把 frpc 命令行的复杂度——配置文件、进程管理、健康检查——封装为图形化界面。
+
+### 支持哪些平台？
+
+macOS（Apple Silicon `aarch64` 与 Intel `x64`）和 Windows（`x64`）。安装包发布在 [GitHub Releases](https://github.com/lingjistudio/moonbox-desktop/releases)，提供 DMG（macOS）与 EXE（Windows）两种格式。
+
+### 需要自己安装 frp 吗？
+
+不需要。灵机魔盒通过 [Tauri sidecar 机制](https://tauri.app) 内置了 frpc 二进制（当前 v0.69.1），开箱即用。
+
+### 是开源的吗？
+
+是的。灵机魔盒以 MIT 协议开源，源代码与发布节奏在 GitHub 仓库 `lingjistudio/moonbox-desktop` 公开。
+
+### 与直接用 frp 命令行相比，多了什么？
+
+可视化管理代理规则、4 态圆形启停按钮、端点健康轮询（每 3 秒探测本地端口可达性）、系统托盘常驻、开机启动与静默启动、定时连接（按星期与起止时间）、从上游 GitHub Release 自动更新 frpc 引擎（SHA256 校验后原子替换），以及应用本体自更新。
+
+### 我没有 frps 服务器，能用吗？
+
+灵机魔盒只管理 frpc 客户端侧，需要你自备 frps 服务端。常见方案：① 自建一台有公网 IP 的机器（云厂商 1 核 2G 即可）；② 使用社区公开的 frps 节点（请自行评估可信度与安全性）；③ 在云函数（Serverless）上部署轻量 frps。Discussions 区有用户分享的部署教程。
+
+### 通过灵机魔盒暴露内网服务，数据安全吗？
+
+数据安全由 frp 协议本身保障：通信使用 TCP/TLS 或 KCP 加密，认证 Token 由你掌握。灵机魔盒本身不存储、不中转你的业务数据，配置文件和 Token 仅保存在本机。
+安全实践建议：① 为每个代理规则设置不同的强 Token；② 启用 frpc 的 TLS 加密（`frpc.toml` 中 `transport.tls.force = true`）；③ frps 服务端开启鉴权白名单（`allowUsers`）；④ 公网侧配合防火墙仅暴露必要端口。
+
+### 灵机魔盒和 ZeroTier / Tailscale 有什么区别？
+
+二者场景不同：ZeroTier / Tailscale 属于全设备组网 VPN，把所有流量纳入虚拟局域网；frp（灵机魔盒管理的协议）属于按需反向代理，仅把指定本地端口一对一暴露到公网。
+想远程桌面/SSH 到家里所有机器 → 选 ZeroTier/Tailscale；只想把家里的 NAS、博客、Webhook 回调临时对外 → 选 frp + 灵机魔盒。两者可共存。
+
+## 关键词
+
+FRP 内网穿透 · frpc · frps · 反向代理 · NAT 穿透 · 内网穿透桌面客户端 · Tauri v2 · Rust · Vue 3 · TypeScript · macOS · Windows · Apple Silicon · 跨平台桌面应用 · MIT 开源 · 灵机魔盒 · Moonbox · 灵几工作室
+
 ## 下载
 
 预构建包发布在 [GitHub Releases](https://github.com/lingjistudio/moonbox-desktop/releases)。
