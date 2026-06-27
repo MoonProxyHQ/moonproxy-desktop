@@ -99,6 +99,16 @@ pnpm tauri build      # 当前平台打包
 
 > 依赖：Node.js、pnpm、Rust 工具链、各平台构建工具链。详见 [CONTRIBUTING.md](./CONTRIBUTING.md)。
 
+## 资源与链接
+
+| 资源 | 链接 |
+| --- | --- |
+| 🌐 官方主页 | <https://moonbox.app> |
+| 📦 下载安装包 | [GitHub Releases](https://github.com/lingjistudio/moonbox-desktop/releases) |
+| 📖 贡献指南 | [CONTRIBUTING.md](./CONTRIBUTING.md) |
+| 💬 问题反馈与讨论 | [GitHub Issues](https://github.com/lingjistudio/moonbox-desktop/issues) · [Discussions](https://github.com/lingjistudio/moonbox-desktop/discussions) |
+| 🛠 开发协作文档 | [AGENTS.md](./AGENTS.md) |
+
 ## 许可证
 
 [MIT](./LICENSE)。

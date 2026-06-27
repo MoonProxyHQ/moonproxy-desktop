@@ -111,6 +111,16 @@ pnpm tauri build      # production build for current platform
 > Requires Node.js, pnpm, Rust toolchain, and platform-specific build tools.
 > See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 
+## Resources
+
+| Resource | Link |
+| --- | --- |
+| 🌐 Official homepage | <https://moonbox.app> |
+| 📦 Download installers | [GitHub Releases](https://github.com/lingjistudio/moonbox-desktop/releases) |
+| 📖 Contributing guide | [CONTRIBUTING.md](./CONTRIBUTING.md) |
+| 💬 Issues & discussions | [GitHub Issues](https://github.com/lingjistudio/moonbox-desktop/issues) · [Discussions](https://github.com/lingjistudio/moonbox-desktop/discussions) |
+| 🛠 Dev collaboration doc | [AGENTS.md](./AGENTS.md) |
+
 ## License
 
 [MIT](./LICENSE).
