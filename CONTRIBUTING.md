@@ -136,3 +136,38 @@ pnpm tauri signer generate -w ~/.tauri/moonbox-desktop.key
 参与本项目的每一位贡献者都需要遵守 [MIT 行为准则](https://www.contributor-covenant.org/version/2/1/code_of_conduct/)。
 
 简而言之：保持友善、就事论事、对新手友好。
+## 六、SEO / GEO 贡献
+
+本仓库同时是项目的**首要落地页**（很多用户第一次接触项目是从 GitHub 搜索 / 分享链接进入），因此仓库自身的 SEO / GEO 与官网同等重要。
+
+### 关键资产清单
+
+| 文件 | 作用 | 维护要点 |
+| --- | --- | --- |
+| `README.md` / `README.en.md` | 主落地页，搜索引擎与 AI 答案引擎抓取的核心 | 保持 H1/H2 结构、关键词段、FAQ、官网与下载链接 |
+| `llm.txt` / `.well-known/llm.txt` | LLM 友好摘要（GEO / AEO） | 改产品定位 / 平台 / 安装包命名时同步更新两份 |
+| `robots.txt` | 允许爬虫（含 AI 爬虫）索引 | 不要误封 `GPTBot` / `ClaudeBot` / `CCBot` / `PerplexityBot` |
+| `humans.txt` | 团队署名（信任信号） | 加新 maintainer 时更新 |
+| `SECURITY.md` / `.well-known/security.txt` | 安全披露通道（RFC 9116） | 记得在 `Expires` 字段到期前续期 |
+| `.github/ISSUE_TEMPLATE/*` | Bug / Feature / Question 模板 | 新增功能模块时考虑是否要加专属字段 |
+| `.github/PULL_REQUEST_TEMPLATE.md` | PR 检查清单 | 版本号同步规范变化时同步勾选项 |
+| `docs/social/README.md` | 社交预览图说明 | 设计稿落地后改为实际图片路径 |
+| `.github/workflows/seo-geo.yml` | CI 自动校验上述资产 | 新增资产时在 `check()` 中补一行 |
+
+### 改动准则
+
+- **改产品定位 / 平台 / 安装包命名**：必须同步 `README.md`、`README.en.md`、`llm.txt`、`.well-known/llm.txt` 四处文案。
+- **新增 GitHub Topic**：通过仓库 Settings → Topics 添加（不在代码里），topics 影响 GitHub 站内搜索权重。
+- **社交预览图**：1200×630，放到仓库根目录 `social-preview.png` 并在 GitHub Settings → Social preview 上传同一张。
+- **不要在 `llm.txt` 里塞营销话术**：保持事实性、可被 LLM 直接引用的紧凑陈述。
+
+### 校验
+
+```bash
+# 本地手动跑 CI 等价检查（无需启动 GH Actions）
+test -f llm.txt && test -f robots.txt && test -f humans.txt \
+  && test -f SECURITY.md && test -f .well-known/security.txt \
+  && test -f .well-known/llm.txt && echo "SEO/GEO assets OK"
+```
+
+推送 PR 时若改动了上述任一文件，`.github/workflows/seo-geo.yml` 会自动校验。

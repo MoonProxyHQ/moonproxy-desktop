@@ -84,6 +84,47 @@ for [fatedier/frp](https://github.com/fatedier/frp) and is independent from the 
 
 > In short: **frp provides the capability, Moonbox Desktop provides the usability.**
 
+## FAQ
+
+### What is Moonbox?
+
+Moonbox (Chinese name: **灵机魔盒**) is a cross-platform **FRP (Fast Reverse Proxy) tunnel desktop client**
+for non-technical users, built on [Tauri v2](https://tauri.app). It wraps frpc command-line complexity —
+config files, process management, health checks — into a graphical interface.
+
+### Which platforms does it support?
+
+macOS (Apple Silicon `aarch64` and Intel `x64`) and Windows (`x64`). Installers are published on
+[GitHub Releases](https://github.com/lingjistudio/moonbox-desktop/releases) as DMG (macOS) and EXE (Windows).
+
+### Do I need to install frp separately?
+
+No. Moonbox bundles the frpc binary (currently v0.69.1) via [Tauri's sidecar mechanism](https://tauri.app) — it works out of the box.
+
+### What does it add over the raw frp CLI?
+
+Visual proxy rule management, a 4-state circular start/stop button, endpoint health polling (every 3s),
+system tray residency, launch-at-login with silent start, scheduled connect (by weekday and time window),
+automatic frpc engine updates from upstream GitHub Releases (SHA256-verified, atomic swap), and app self-updates.
+
+### Can I use it without an frps server?
+
+Moonbox only manages the frpc client side — you must supply your own frps server. Common options:
+① self-host a machine with a public IP (a 1 vCPU / 2GB cloud VPS is enough); ② use a community-public frps node
+(evaluate trust and security yourself); ③ deploy a lightweight frps on serverless / cloud functions.
+
+### How does Moonbox differ from ZeroTier / Tailscale?
+
+They cover different needs. ZeroTier / Tailscale are full-device mesh VPNs that pull all traffic into a virtual LAN;
+frp (what Moonbox manages) is an on-demand reverse proxy that exposes a single local port to the public internet.
+Want to RDP/SSH into every home machine → pick ZeroTier/Tailscale; just want to temporarily expose a NAS, blog, or
+Webhook callback → pick frp + Moonbox. The two can coexist.
+
+## Keywords
+
+FRP tunnel · frpc · frps · reverse proxy · NAT traversal · intranet penetration · desktop client · Tauri v2 · Rust ·
+Vue 3 · TypeScript · macOS · Windows · Apple Silicon · cross-platform desktop app · MIT open source · Moonbox · Lingji Studio
+
 ## Install
 
 Pre-built binaries are published on the

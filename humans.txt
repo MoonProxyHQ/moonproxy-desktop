@@ -1,0 +1,16 @@
+/* TEAM */
+
+Developer: Lingji Studio (灵机工作室)
+Site: https://github.com/lingjistudio
+Location: China
+
+/* THANKS */
+
+fatedier (frp upstream): https://github.com/fatedier/frp
+Tauri (framework): https://tauri.app
+
+/* SITE */
+
+Standards: HTML, CSS, Vue 3, Rust, TypeScript
+Components: Tauri v2, Vue 3, Vite
+Software: Moonbox Desktop

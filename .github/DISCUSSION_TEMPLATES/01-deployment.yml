@@ -1,0 +1,23 @@
+title: "【部署】frps 服务端 / 节点相关"
+labels: ["deployment"]
+category_id: ""
+body: |
+  ### 场景
+
+  - [ ] 自建 frps
+  - [ ] 使用社区公开 frps
+  - [ ] 云函数 / Serverless 部署
+  - [ ] 容器化（Docker）
+  - [ ] 其他
+
+  ### 关键信息
+
+  - 云厂商 / 节点提供方：
+  - 操作系统：
+  - frps 版本：
+  - 客户端 Moonbox Desktop 版本：
+  - 带宽 / 网络情况：
+
+  ### 详细描述
+
+  把你的部署过程、踩坑、配置片段贴出来。

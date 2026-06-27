@@ -1,0 +1,27 @@
+# robots.txt for lingjistudio/moonbox-desktop (GitHub-hosted repo)
+# GitHub serves the rendered README and repo pages to crawlers.
+
+# Allow general indexing of the public repository surface.
+User-agent: *
+Allow: /
+
+# Explicitly allow AI / answer-engine crawlers to read public repo content
+# (GEO / AEO friendliness — improves visibility in AI search results).
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# XML sitemap (GitHub does not auto-generate one for repos; pointing at the
+# product homepage sitemap instead, which describes the project too).
+Sitemap: https://moonbox.lingjistudio.com/sitemap.xml

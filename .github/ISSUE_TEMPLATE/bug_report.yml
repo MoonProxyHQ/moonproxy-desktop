@@ -1,0 +1,83 @@
+name: 🐛 Bug Report
+description: 报告 Moonbox Desktop 的 Bug（崩溃、连接异常、显示错误等）
+title: "[Bug] "
+labels: ["bug", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢提交 Bug！请尽量填写以下信息，能极大缩短排查时间。
+        **安全相关问题请勿在此填写**，请按 [SECURITY.md](../SECURITY.md) 私密上报。
+
+  - type: input
+    id: version
+    attributes:
+      label: Moonbox Desktop 版本
+      placeholder: v1.0.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: 操作系统
+      options:
+        - macOS (Apple Silicon)
+        - macOS (Intel)
+        - Windows (x64)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: frpc_version
+    attributes:
+      label: frpc 引擎版本
+      options:
+        - 内置 v0.69.1
+        - 自更新到其他版本
+        - 不确定
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 打开「设置 → 代理」
+        2. 添加一个 TCP 规则
+        3. 点击主页大按钮
+        4. …
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期行为
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 关键日志
+      description: 设置面板「日志」Tab 中启动/连接相关片段（请遮蔽 Token / IP）
+    validations:
+      required: false
+
+  - type: textarea
+    id: frpc_toml
+    attributes:
+      label: frpc.toml 关键片段
+      description: 去掉 Token 后粘贴相关代理配置
+    validations:
+      required: false

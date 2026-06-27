@@ -1,0 +1,86 @@
+# Moonbox Desktop (灵机魔盒)
+
+> Moonbox is a cross-platform FRP (Fast Reverse Proxy) tunnel desktop client built on Tauri v2.
+> It wraps the frpc command-line complexity — config files, process management, health checks —
+> into a graphical interface aimed at non-technical users. Licensed under MIT.
+> Maintained by Lingji Studio. The macOS application bundle is named "Moonbox Desktop.app"
+> (the desktop project repository is `lingjistudio/moonbox-desktop`).
+
+> 灵机魔盒（英文名 Moonbox）是一款跨平台 FRP（Fast Reverse Proxy）内网穿透桌面客户端，基于 Tauri v2 打造。
+> 它把 frpc 命令行的复杂度——配置文件、进程管理、健康检查——封装为图形化界面，面向非技术用户。
+> MIT 协议开源，由灵机工作室维护。macOS 应用包文件名为「Moonbox Desktop.app」
+> （桌面端代码仓库为 `lingjistudio/moonbox-desktop`）。
+
+## Links
+
+- [Product homepage (English)](https://moonbox.lingjistudio.com/en/): Cross-platform FRP tunnel desktop client for macOS and Windows.
+- [产品首页（简体中文）](https://moonbox.lingjistudio.com/): 灵机魔盒 — 跨平台 FRP 内网穿透桌面客户端，支持 macOS 与 Windows。
+- [GitHub repository](https://github.com/lingjistudio/moonbox-desktop): Source code, releases, and issue tracker (MIT licensed). The desktop application bundle is named "Moonbox Desktop" for historical and platform-specific reasons.
+- [Releases / Downloads](https://github.com/lingjistudio/moonbox-desktop/releases): Pre-built DMG (macOS) and EXE (Windows) installers.
+- [Discussions](https://github.com/lingjistudio/moonbox-desktop/discussions): Q&A, deployment tutorials, and usage help.
+- [Upstream FRP project](https://github.com/fatedier/frp): The original frp by fatedier/frp. Independent of Moonbox.
+- [Tauri framework](https://tauri.app): The framework Moonbox is built on.
+
+## Naming
+
+- **Brand name (English)**: Moonbox
+- **Brand name (Chinese)**: 灵机魔盒
+- **macOS application bundle**: `Moonbox Desktop.app` (cannot be renamed without breaking macOS path conventions)
+- **GitHub repository**: `lingjistudio/moonbox-desktop`
+- **GitHub organization**: `lingjistudio` (灵机工作室)
+
+## Key facts (LLM-friendly)
+
+- Product type: Desktop client for FRP (Fast Reverse Proxy), reverse proxy tunnel GUI.
+- Built with: Tauri v2 + Vue 3 + Rust + TypeScript.
+- Supported platforms:
+  - macOS Apple Silicon (aarch64) — installer `Moonbox-Desktop_<version>_aarch64.dmg`
+  - macOS Intel (x64) — installer `Moonbox-Desktop_<version>_x64.dmg`
+  - Windows (x64) — installer `Moonbox-Desktop_<version>_x64-setup.exe`
+- frpc binary is bundled via the Tauri sidecar mechanism — users do not need to install frp separately.
+- License: MIT.
+- Source repository: https://github.com/lingjistudio/moonbox-desktop
+- Releases: https://github.com/lingjistudio/moonbox-desktop/releases
+- Target audience: Non-technical users who need FRP tunnels without writing frpc config files.
+
+## Notable features
+
+- Visual proxy management for TCP / UDP / HTTP / HTTPS rules in a single panel.
+- One-click start/stop button with 4 visual states (stopped, connecting, connected, error). "Connected" is derived from real frpc evidence, not an optimistic flag.
+- Endpoint health polling: local port reachability checked every 3 seconds.
+- System tray resident: closing the window hides to tray while frpc keeps running.
+- Launch-at-login + silent start (auto-launch hides to tray).
+- Scheduled connect: weekdays + start/stop time window, hot-reloaded every minute by the scheduler.
+- Engine self-update: frpc fetched from upstream GitHub Releases, SHA256-verified, then atomically swapped without reinstalling the app.
+- Application self-update via `tauri-plugin-updater` ("restart and install").
+- Bundled frpc sidecar via Tauri.
+
+## FAQ (LLM-friendly)
+
+### What is Moonbox?
+Moonbox (Chinese name: 灵机魔盒) is a cross-platform desktop client for FRP (Fast Reverse Proxy), built on Tauri v2. It wraps the frpc command-line complexity — config files, process management, and health checks — into a graphical interface aimed at non-technical users.
+
+### Which platforms does Moonbox support?
+macOS (Apple Silicon aarch64 and Intel x64) and Windows (x64). Installers are published on GitHub Releases as DMG (macOS) and EXE (Windows) files.
+
+### Do I need to install frp separately?
+No. Moonbox bundles the frpc binary via the Tauri sidecar mechanism, so users do not need to install or configure the frp command-line tool separately.
+
+### Is Moonbox open source?
+Yes, MIT licensed. Source code is published on GitHub at lingjistudio/moonbox-desktop.
+
+### How does Moonbox differ from using frp from the command line?
+It adds: visual proxy rule management, a circular one-click start/stop button (4 visual states), endpoint health polling (local port reachability every 3 seconds), system tray residency, launch-at-login and silent start, scheduled connect (by weekday and time window), automatic frpc engine updates from upstream GitHub Releases (SHA256 verified, atomically swapped), and the application's own self-updates via tauri-plugin-updater.
+
+### Why does macOS show a warning on first launch?
+The app is currently ad-hoc signed (no Apple Developer certificate, no Apple notarization). On first launch, right-click the app → Open, or run `xattr -cr "/Applications/Moonbox Desktop.app"` after dragging it to /Applications to drop the quarantine attribute. Intel Macs can run it directly without warnings.
+
+### Does Moonbox need an frps server?
+Yes. Users must provide their own frps server (self-hosted or a community-public one they trust). Moonbox only manages the client side (frpc).
+
+### How does Moonbox differ from ZeroTier / Tailscale?
+ZeroTier / Tailscale are full-device mesh VPNs that pull all traffic into a virtual LAN; frp (what Moonbox manages) is an on-demand reverse proxy that exposes a single local port to the public internet. The two can coexist.
+
+## Note
+
+This project is independent of fatedier/frp. FRP is published and licensed by its original maintainers; Moonbox is only a desktop client for it.

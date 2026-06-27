@@ -1,0 +1,27 @@
+name: ❓ Question / 用法问题
+description: 不知道怎么用 / 怎么配置 / 怎么部署？来这里问（也可以去 Discussions）
+title: "[Question] "
+labels: ["question"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ 通用问题（部署、frps 服务端搭建、自建节点推荐）更推荐去
+        [Discussions](https://github.com/lingjistudio/moonbox-desktop/discussions) 提问，
+        Issue 用于跟踪明确的 Bug / Feature。
+
+  - type: textarea
+    id: question
+    attributes:
+      label: 你的问题
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: 操作系统
+      placeholder: macOS 14 / Windows 11
+    validations:
+      required: false

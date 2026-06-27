@@ -1,0 +1,96 @@
+name: SEO / GEO Assets
+
+# 校验 GitHub 仓库的 SEO / GEO 关键资产完整性。
+# 这些资产影响搜索引擎收录、AI 答案引擎可见性、社交分享点击率。
+# 详见 CONTRIBUTING.md §SEO / GEO 贡献。
+
+on:
+  pull_request:
+    paths:
+      - "README.md"
+      - "README.en.md"
+      - "llm.txt"
+      - "robots.txt"
+      - "humans.txt"
+      - "SECURITY.md"
+      - ".well-known/**"
+      - ".github/ISSUE_TEMPLATE/**"
+      - ".github/PULL_REQUEST_TEMPLATE.md"
+      - "docs/social/**"
+  push:
+    branches: [main]
+    paths:
+      - "llm.txt"
+      - "robots.txt"
+      - ".well-known/**"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: 校验 SEO / GEO 资产
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: 校验关键文件存在
+        run: |
+          set -e
+          fail=0
+          check() {
+            if [ ! -f "$1" ]; then
+              echo "::error file=$1::缺失关键 SEO/GEO 文件：$1"
+              fail=1
+            else
+              echo "::notice file=$1::存在 $1"
+            fi
+          }
+          check README.md
+          check README.en.md
+          check llm.txt
+          check robots.txt
+          check humans.txt
+          check SECURITY.md
+          check .well-known/security.txt
+          check .well-known/llm.txt
+          check .github/ISSUE_TEMPLATE/bug_report.yml
+          check .github/ISSUE_TEMPLATE/feature_request.yml
+          check .github/PULL_REQUEST_TEMPLATE.md
+          check docs/social/README.md
+          exit $fail
+
+      - name: 校验 llm.txt 包含必要锚文本
+        run: |
+          set -e
+          for kw in "Moonbox" "FRP" "Tauri v2" "MIT" "lingjistudio/moonbox-desktop"; do
+            if ! grep -qi "$kw" llm.txt; then
+              echo "::error file=llm.txt::llm.txt 缺少关键词：$kw"
+              exit 1
+            fi
+          done
+          echo "::notice file=llm.txt::关键词检查通过"
+
+      - name: 校验 security.txt 符合 RFC 9116 字段
+        run: |
+          set -e
+          for field in "^Contact:" "^Expires:" "^Preferred-Languages:"; do
+            if ! grep -qE "$field" .well-known/security.txt; then
+              echo "::error file=.well-known/security.txt::security.txt 缺少字段：$field"
+              exit 1
+            fi
+          done
+          echo "::notice file=.well-known/security.txt::RFC 9116 字段检查通过"
+
+      - name: 校验 README 包含官网与下载链接
+        run: |
+          set -e
+          for kw in "moonbox.lingjistudio.com" "releases"; do
+            if ! grep -q "$kw" README.md; then
+              echo "::error file=README.md::README.md 缺少链接：$kw"
+              exit 1
+            fi
+          done
+          echo "::notice file=README.md::链接检查通过"
