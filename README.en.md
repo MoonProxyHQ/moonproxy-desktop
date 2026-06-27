@@ -117,7 +117,7 @@ pnpm tauri build      # production build for current platform
 
 | Resource | Link |
 | --- | --- |
-| 🌐 Official homepage | <https://moonbox.app> |
+| 🌐 Official homepage | <https://moonbox.lingjistudio.com> |
 | 📦 Download installers | [GitHub Releases](https://github.com/lingjistudio/moonbox-desktop/releases) |
 | 📖 Contributing guide | [CONTRIBUTING.md](./CONTRIBUTING.md) |
 | 💬 Issues & discussions | [GitHub Issues](https://github.com/lingjistudio/moonbox-desktop/issues) · [Discussions](https://github.com/lingjistudio/moonbox-desktop/discussions) |

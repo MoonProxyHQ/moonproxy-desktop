@@ -103,7 +103,7 @@ pnpm tauri build      # 当前平台打包
 
 | 资源 | 链接 |
 | --- | --- |
-| 🌐 官方主页 | <https://moonbox.app> |
+| 🌐 官方主页 | <https://moonbox.lingjistudio.com> |
 | 📦 下载安装包 | [GitHub Releases](https://github.com/lingjistudio/moonbox-desktop/releases) |
 | 📖 贡献指南 | [CONTRIBUTING.md](./CONTRIBUTING.md) |
 | 💬 问题反馈与讨论 | [GitHub Issues](https://github.com/lingjistudio/moonbox-desktop/issues) · [Discussions](https://github.com/lingjistudio/moonbox-desktop/discussions) |
