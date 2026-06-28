@@ -74,11 +74,18 @@ src-tauri/
 ### 3.1 `StartArgs` / `ProxyConfig`（`types.rs`）
 
 - `StartArgs` 字段：`provider_id` / `custom_name`（自定义服务商语义）+ `server_addr` / `server_port` / `token` / `user` / `proxies`
-- 字段命名严格 snake_case，**`ProxyConfig.type` 经 `#[serde(rename = "type")]` 映射**
-  以匹配前端 TS 接口
+- 字段命名严格 snake_case
 - `provider_id` / `custom_name` / `token` / `user` 为 `Option<String>`：前端在
   `toArgs()` 中空字符串 → `null`；后端据此决定是否写入 `auth.token` / `user` 字段
   并区分内置 / 自定义服务商
+- `ProxyConfig` 按 frp 官方各类型 schema 拆分为 `#[serde(tag = "type")]` 的内部标签 enum：
+  - `tcp` / `udp` variant：`name` / `local_ip` / `local_port` / `remote_port`
+    （frp 接受 `remotePort`，**不接受** `customDomains`）
+  - `http` / `https` variant：`name` / `local_ip` / `local_port` / `custom_domains: Vec<String>`
+    （frp 接受 `customDomains`，**不接受** `remotePort`——否则报 `unknown field "remotePort"`）
+  - 序列化形态：`{ "type": "tcp", "name": "...", ... }`，与前端 `ProxyConfig`
+    discriminated union 一一对应；**非法字段在编译期就不可能出现在错的 variant 上**，
+    避免 `build_toml` / `probe_proxy` / URL 生成路径再按 `proxy_type` 字符串运行期分叉
 
 ### 3.2 `Prefs`（`prefs.rs`）
 

@@ -2,9 +2,10 @@
 import { reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Trash2 } from "@lucide/vue";
+
 import { config } from "../../state";
 import { saveConfig } from "../../commands/config";
-import type { ProxyConfig } from "../../types";
+import type { ProxyConfig, ProxyType } from "../../types";
 import { useToast } from "../../composables/useToast";
 import Toast from "../Toast.vue";
 
@@ -14,11 +15,62 @@ const { toast, showToast } = useToast();
 /** 代理规则数量上限；达到后隐藏「添加代理」按钮。 */
 const MAX_PROXIES = 5;
 
+/**
+ * 表单中间类型：所有可能的字段都铺平在同一结构里。
+ *
+ * 设计动机：Vue 的 `v-model` 在 discriminated union 上不友好（每次绑定都要
+ * 先 type-narrow）。所以表单内部用一个胖结构，保存时再按 `type` 拆成对应
+ * 的 `ProxyConfig` variant——不合法字段在转换阶段被丢弃，序列化到后端的
+ * 永远是 union 形态。
+ *
+ * 字段含义：
+ * - `remote_port`：tcp/udp 用；http/https 时该字段不展示，提交时丢弃
+ * - `custom_domain`：http/https 用；单值域名；tcp/udp 时该字段不展示
+ */
+interface ProxyForm {
+  name: string;
+  type: ProxyType;
+  local_ip: string;
+  local_port: number;
+  remote_port: number;
+  custom_domain: string;
+}
+
+/** 把 reactive `config.proxies`（ProxyConfig union）映射为表单副本。 */
+function toForm(p: ProxyConfig): ProxyForm {
+  const base = {
+    name: p.name,
+    type: p.type,
+    local_ip: p.local_ip,
+    local_port: p.local_port,
+  };
+  switch (p.type) {
+    case "tcp":
+    case "udp":
+      return { ...base, remote_port: p.remote_port, custom_domain: "" };
+    case "http":
+    case "https":
+      return {
+        ...base,
+        remote_port: 0,
+        custom_domain: p.custom_domain,
+      };
+  }
+}
+
 const form = reactive({
   proxies: (config.proxies.length
-    ? config.proxies.map((p) => ({ ...p }))
-    : [{ name: "", type: "tcp", local_ip: "127.0.0.1", local_port: 80, remote_port: 0 }]
-  ) as ProxyConfig[],
+    ? config.proxies.map(toForm)
+    : [
+        {
+          name: "",
+          type: "tcp" as ProxyType,
+          local_ip: "127.0.0.1",
+          local_port: 80,
+          remote_port: 0,
+          custom_domain: "",
+        },
+      ]) as ProxyForm[],
 });
 
 const saving = ref(false);
@@ -38,6 +90,7 @@ function addProxy() {
     local_ip: "127.0.0.1",
     local_port: 80,
     remote_port: 0,
+    custom_domain: "",
   });
 }
 
@@ -45,14 +98,68 @@ function removeProxy(index: number) {
   form.proxies.splice(index, 1);
 }
 
+/** 是否为端口型代理（TCP/UDP），需要 `remote_port` 字段。 */
+function isPortProxy(t: ProxyType): boolean {
+  return t === "tcp" || t === "udp";
+}
+
+/**
+ * 域名格式校验：每段（label）字母/数字/连字符、不以连字符开头/结尾；
+ * 至少两个 label。不做 DNS 真实存在性检查——避免阻塞网络。
+ */
+const DOMAIN_LABEL_RE = /^[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
+function isValidDomain(s: string): boolean {
+  if (!s || s.length > 253) return false;
+  const labels = s.split(".");
+  if (labels.length < 2) return false;
+  return labels.every((l) => l.length >= 1 && l.length <= 63 && DOMAIN_LABEL_RE.test(l));
+}
+
 function validate(): string | null {
   if (form.proxies.length === 0) return $t("proxy_err_min");
   for (let i = 0; i < form.proxies.length; i++) {
+    const n = i + 1;
     const p = form.proxies[i];
-    if (!p.name.trim() || !p.local_ip.trim()) return $t("proxy_err_incomplete", { n: i + 1 });
-    if (p.local_port <= 0 || p.remote_port <= 0) return $t("proxy_err_port", { n: i + 1 });
+    if (!p.name.trim() || !p.local_ip.trim()) {
+      return $t("proxy_err_incomplete", { n });
+    }
+    if (p.local_port <= 0) return $t("proxy_err_port", { n });
+    if (isPortProxy(p.type)) {
+      if (p.remote_port <= 0) return $t("proxy_err_port", { n });
+    } else {
+      const d = p.custom_domain.trim();
+      if (!d) return $t("proxy_err_custom_domain", { n });
+      if (!isValidDomain(d)) return $t("proxy_err_domain_format", { n });
+    }
   }
   return null;
+}
+
+/** 表单副本 → ProxyConfig union，按 `type` 拆出对应字段。 */
+function fromForm(p: ProxyForm): ProxyConfig {
+  const name = p.name.trim();
+  const local_ip = p.local_ip.trim();
+  const local_port = Number(p.local_port);
+  switch (p.type) {
+    case "tcp":
+    case "udp":
+      return {
+        type: p.type,
+        name,
+        local_ip,
+        local_port,
+        remote_port: Number(p.remote_port),
+      };
+    case "http":
+    case "https":
+      return {
+        type: p.type,
+        name,
+        local_ip,
+        local_port,
+        custom_domain: p.custom_domain.trim(),
+      };
+  }
 }
 
 async function onSave() {
@@ -62,13 +169,7 @@ async function onSave() {
     return;
   }
   saving.value = true;
-  config.proxies = form.proxies.map((p) => ({
-    name: p.name.trim(),
-    type: p.type,
-    local_ip: p.local_ip.trim(),
-    local_port: Number(p.local_port),
-    remote_port: Number(p.remote_port),
-  }));
+  config.proxies = form.proxies.map(fromForm);
   const e = await saveConfig();
   saving.value = false;
   if (e) showToast($t("msg_save_failed", { err: e }), "error", 4000);
@@ -101,7 +202,7 @@ async function onSave() {
             <span class="label">{{ $t("proxy_label_name") }}</span>
             <input class="input" v-model="p.name" :placeholder="$t('proxy_ph_name')" />
           </label>
-          <label class="form-item span-2">
+          <label class="form-item" :class="{ 'span-2': isPortProxy(p.type), 'span-3': !isPortProxy(p.type) }">
             <span class="label">{{ $t("proxy_label_local_ip") }}</span>
             <input class="input" v-model="p.local_ip" :placeholder="$t('proxy_ph_local_ip')" />
           </label>
@@ -109,10 +210,17 @@ async function onSave() {
             <span class="label">{{ $t("proxy_label_local_port") }}</span>
             <input class="input" v-model.number="p.local_port" type="number" min="1" max="65535" :placeholder="$t('proxy_ph_local_port')" @keydown="onlyNumber" />
           </label>
-          <label class="form-item">
+          <label v-if="isPortProxy(p.type)" class="form-item">
             <span class="label">{{ $t("proxy_label_remote_port") }}</span>
             <input class="input" v-model.number="p.remote_port" type="number" min="1" max="65535" :placeholder="$t('proxy_ph_remote_port')" @keydown="onlyNumber" />
           </label>
+          <label v-else class="form-item span-4">
+            <span class="label">{{ $t("proxy_label_custom_domain") }}</span>
+            <input class="input" v-model="p.custom_domain" :placeholder="$t('proxy_ph_custom_domain')" />
+          </label>
+        </div>
+        <div v-if="!isPortProxy(p.type)" class="proxy-hint">
+          {{ $t("proxy_hint_http_domain") }}
         </div>
       </div>
       <div class="proxy-add-row">
@@ -160,6 +268,9 @@ async function onSave() {
 .form-item.span-3 {
   grid-column: span 3;
 }
+.form-item.span-4 {
+  grid-column: span 4;
+}
 .label {
   font-size: 12px;
   color: hsl(var(--muted-foreground));
@@ -198,6 +309,13 @@ async function onSave() {
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr 1fr;
   gap: 8px;
+}
+.proxy-hint {
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: hsl(var(--muted-foreground));
+  padding: 0 2px;
 }
 .proxy-add-row {
   display: flex;

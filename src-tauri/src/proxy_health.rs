@@ -23,7 +23,6 @@ pub struct ProxyHealth {
 ///
 /// - TCP/HTTP/HTTPS 用 `TcpStream::connect_timeout` 阻塞探测
 /// - UDP 用 `UdpSocket::send_to(&[])` 探测链路可写
-/// - 不在 `SUPPORTED_PROXY_TYPES` 内的类型：不探测，标记"未检测"
 ///
 /// 注意：
 /// - 多 IP 主机上 `to_socket_addrs` 可能返回多个地址；**任意一个 TCP 连接成功
@@ -31,7 +30,13 @@ pub struct ProxyHealth {
 /// - UDP 的"探测已发送"**只代表链路可写，不代表对端应用在监听**；这点在
 ///   `message` 文案里已明确，UI 不要把它当作"应用存活"。
 fn probe_proxy(p: &ProxyConfig) -> (bool, String) {
-    let addr_str = format!("{}:{}", p.local_ip, p.local_port);
+    let (local_ip, local_port) = match p {
+        ProxyConfig::Tcp { local_ip, local_port, .. }
+        | ProxyConfig::Udp { local_ip, local_port, .. }
+        | ProxyConfig::Http { local_ip, local_port, .. }
+        | ProxyConfig::Https { local_ip, local_port, .. } => (local_ip.as_str(), *local_port),
+    };
+    let addr_str = format!("{}:{}", local_ip, local_port);
     let addrs = match std::net::ToSocketAddrs::to_socket_addrs(&addr_str) {
         Ok(iter) => iter.collect::<Vec<_>>(),
         Err(e) => return (false, format!("地址解析失败：{e}")),
@@ -40,10 +45,11 @@ fn probe_proxy(p: &ProxyConfig) -> (bool, String) {
         return (false, "无法解析地址".into());
     }
     let timeout = Duration::from_millis(1500);
-    match p.proxy_type.as_str() {
-        "tcp" | "http" | "https" => probe_tcp(&addrs, timeout),
-        "udp" => probe_udp(&addrs, timeout),
-        _ => (true, "未检测".into()),
+    match p {
+        ProxyConfig::Tcp { .. } | ProxyConfig::Http { .. } | ProxyConfig::Https { .. } => {
+            probe_tcp(&addrs, timeout)
+        }
+        ProxyConfig::Udp { .. } => probe_udp(&addrs, timeout),
     }
 }
 

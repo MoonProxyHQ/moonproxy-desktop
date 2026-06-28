@@ -87,10 +87,15 @@ src/
 `types.ts`：
 
 ```ts
-interface ProxyConfig {
-  name: string; type: string; local_ip: string;
-  local_port: number; remote_port: number;
-}
+// ProxyConfig 是按 `type` 拆分的 discriminated union——每种 frp 代理类型
+// 有独立的 schema（TCP/UDP 走 remotePort，HTTP/HTTPS 走 customDomains 且
+// 不接受 remotePort）。聚合在扁平结构里会让 build_toml / URL 生成路径
+// 都需按字符串 type 分叉，且无法在编译期排除非法字段。
+type ProxyConfig =
+  | { type: "tcp" | "udp"; name: string; local_ip: string;
+      local_port: number; remote_port: number }
+  | { type: "http" | "https"; name: string; local_ip: string;
+      local_port: number; custom_domains: string[] };
 interface FrpcConfig {
   provider_id: string;   // 内置服务商 id（"builtin:..."）或 "custom"
   custom_name: string;   // 自定义服务商显示名称
@@ -296,7 +301,7 @@ HomeView 本身是纯组装壳层，所有"实时"职责拆到 `components/home/
 | 子件 | 职责 |
 | --- | --- |
 | `CircleButton.vue` | 大圆按钮 + Canvas 波纹粒子系统（`useParticles(frpcStatus)`）+ 4 态文案；只 emit `click`，启停逻辑由 `HomeView.vue` 处理 |
-| `ProxyList.vue` | 公网访问地址列表 + 健康点 + 复制按钮 + 3s 健康轮询（自管理 onMounted/onUnmounted）；按代理类型分支生成地址：`http`/`https` → `${type}://${name}`，其他 → `${server_addr}:${remote_port}`；点击地址复制到剪贴板（`navigator.clipboard?.writeText`，失败静默） |
+| `ProxyList.vue` | 公网访问地址列表 + 健康点 + 复制按钮 + 3s 健康轮询（自管理 onMounted/onUnmounted）；按代理类型分支生成地址：`http`/`https` → `${type}://${custom_domains[0]}`（未配域名时回退到 name 占位），`tcp`/`udp` → `${server_addr}:${remote_port}`；点击地址复制到剪贴板（`navigator.clipboard?.writeText`，失败静默） |
 | `GuideCard.vue` | 未配置引导卡片；emit `settings` |
 | `SystemStatus.vue` | 底部只读系统状态栏：开机启动状态 + 定时连接摘要 |
 

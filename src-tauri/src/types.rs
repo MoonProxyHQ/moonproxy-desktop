@@ -30,31 +30,50 @@ pub struct StartArgs {
     pub proxies: Vec<ProxyConfig>,
 }
 
-/// 单条代理规则。`proxy_type` 经 `#[serde(rename = "type")]` 与前端字段名对齐。
-#[derive(Deserialize, Serialize, Clone)]
-pub struct ProxyConfig {
-    /// 代理名称，需唯一
-    pub name: String,
-    /// 代理类型：`tcp` / `udp` / `http` / `https`（由 [`SUPPORTED_PROXY_TYPES`] 约束）
-    #[serde(rename = "type")]
-    pub proxy_type: String,
-    /// 本地服务地址
-    pub local_ip: String,
-    /// 本地服务端口
-    pub local_port: u16,
-    /// 公网访问端口
-    pub remote_port: u16,
-}
-
-/// 受支持的代理类型白名单。`proxy_health.rs` 的探测策略与 `config.rs` 的
-/// 校验逻辑都应基于此判定，避免与前端 TS 端的字面量字符串失同步。
-pub const SUPPORTED_PROXY_TYPES: [&str; 4] = ["tcp", "udp", "http", "https"];
-
-/// 判断字符串是否为受支持的代理类型。
+/// 单条代理规则——按 frp 官方各类型 schema 拆分为 enum variant。
 ///
-/// `config.rs::build_toml` 借此在生成 frpc.toml 前拒绝未知类型，避免无效配置
-/// 写盘；`proxy_health.rs` 借此在探测时跳过未知类型（标记"未检测"）。两处共用
-/// 这条白名单，确保与前端 TS 端的字面量字符串不脱节。
-pub fn is_supported_proxy_type(t: &str) -> bool {
-    SUPPORTED_PROXY_TYPES.iter().any(|s| *s == t)
+/// 设计动机：frp v0.69.x 对每种代理类型有独立的 TOML schema：
+/// - `tcp` / `udp`：`remotePort` 必填，不接受 `customDomains`
+/// - `http` / `https`：`customDomains` 必填，**不接受** `remotePort`
+///   （`remotePort` 会让 frpc 报 `json: unknown field "remotePort"`）
+///
+/// 聚合在同一个扁平结构里会让 `build_toml` / `probe_proxy` / URL 生成路径
+/// 都需要按 `proxy_type` 字符串运行期分叉，且无法在编译期排除非法字段。
+/// 用 `#[serde(tag = "type")]` 的内部标签 enum 后，frp 不接受的字段在
+/// 类型层面就不可能出现在错的 variant 上。
+///
+/// 序列化形态：`{ "type": "tcp", "name": "...", "local_ip": "...", ... }`
+/// 与前端 `ProxyConfig` discriminated union 一一对应。
+#[derive(Deserialize, Serialize, Clone)]
+#[serde(tag = "type")]
+pub enum ProxyConfig {
+    #[serde(rename = "tcp")]
+    Tcp {
+        name: String,
+        local_ip: String,
+        local_port: u16,
+        remote_port: u16,
+    },
+    #[serde(rename = "udp")]
+    Udp {
+        name: String,
+        local_ip: String,
+        local_port: u16,
+        remote_port: u16,
+    },
+    #[serde(rename = "http")]
+    Http {
+        name: String,
+        local_ip: String,
+        local_port: u16,
+        /// 单条代理绑定的公网域名（frp v0.69.x 必填，仅取数组首项）
+        custom_domain: String,
+    },
+    #[serde(rename = "https")]
+    Https {
+        name: String,
+        local_ip: String,
+        local_port: u16,
+        custom_domain: String,
+    },
 }

@@ -17,17 +17,22 @@ const props = defineProps<{
 
 const { t: $t } = useI18n();
 
-/** 生成每条代理的公网访问地址 */
+/** 生成每条代理的公网访问地址。
+ *
+ * - tcp/udp：`<server_addr>:<remote_port>`——frp 直接转发端口
+ * - http/https：`<type>://<custom_domain>`——经 frps vhost 按域名路由分发
+ */
 const proxyEndpoints = computed(() => {
   if (!props.serverAddr) return [];
   return props.proxies.map((p) => {
-    if (p.type === "http" || p.type === "https") {
-      return { name: p.name, url: `${p.type}://${p.name}` };
+    switch (p.type) {
+      case "tcp":
+      case "udp":
+        return { name: p.name, url: `${props.serverAddr}:${p.remote_port}` };
+      case "http":
+      case "https":
+        return { name: p.name, url: `${p.type}://${p.custom_domain}` };
     }
-    return {
-      name: p.name,
-      url: `${props.serverAddr}:${p.remote_port}`,
-    };
   });
 });
 

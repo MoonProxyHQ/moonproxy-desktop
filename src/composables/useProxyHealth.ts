@@ -1,6 +1,7 @@
 import { ref } from "vue";
 import { invoke } from "@tauri-apps/api/core";
 
+import type { ProxyConfig } from "../types";
 import { config } from "../state";
 
 export interface ProxyHealth {
@@ -28,13 +29,7 @@ export async function checkProxiesHealth(): Promise<void> {
     return;
   }
   try {
-    const proxies = config.proxies.map((p) => ({
-      name: p.name,
-      type: p.type,
-      local_ip: p.local_ip,
-      local_port: Number(p.local_port),
-      remote_port: Number(p.remote_port),
-    }));
+    const proxies = config.proxies.map(toProbeArg);
     const results = await invoke<ProxyHealth[]>("check_proxies_health", {
       proxies,
     });
@@ -45,5 +40,29 @@ export async function checkProxiesHealth(): Promise<void> {
     proxyHealth.value = map;
   } catch (e) {
     console.warn("[proxy-health] 检测失败", e);
+  }
+}
+
+/** 单条代理 reactive → 后端 `check_proxies_health` 入参（union 形态）。 */
+function toProbeArg(p: ProxyConfig) {
+  switch (p.type) {
+    case "tcp":
+    case "udp":
+      return {
+        type: p.type,
+        name: p.name,
+        local_ip: p.local_ip,
+        local_port: Number(p.local_port),
+        remote_port: Number(p.remote_port),
+      };
+    case "http":
+    case "https":
+      return {
+        type: p.type,
+        name: p.name,
+        local_ip: p.local_ip,
+        local_port: Number(p.local_port),
+        custom_domain: p.custom_domain,
+      };
   }
 }
