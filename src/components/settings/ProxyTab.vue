@@ -429,6 +429,6 @@ async function onSave() {
 .tab-footer {
   display: flex;
   justify-content: flex-end;
-  padding: 12px 0 0;
+  padding: 12px 0 20px;
 }
 </style>
