@@ -17,6 +17,16 @@ const props = defineProps<{
 
 const { t: $t } = useI18n();
 
+/** 密度档位阈值。
+ *
+ * - ≤ COMPACT_THRESHOLD：双行宽松布局（name / url 各占一行）
+ * - > COMPACT_THRESHOLD：紧凑单行布局，提升单屏容量
+ * - > COLLAPSE_THRESHOLD：在紧凑模式基础上折叠剩余条目，留出兜底入口
+ */
+const COMPACT_THRESHOLD = 3;
+const COLLAPSE_THRESHOLD = 12;
+const COLLAPSE_VISIBLE = 8;
+
 /** 生成每条代理的公网访问地址。
  *
  * - tcp/udp：`<server_addr>:<remote_port>`——frp 直接转发端口
@@ -39,6 +49,19 @@ const proxyEndpoints = computed(() => {
 const copiedIndex = ref<number | null>(null);
 let copiedTimer: ReturnType<typeof setTimeout> | null = null;
 let healthTimer: ReturnType<typeof setInterval> | null = null;
+
+const isCompact = computed(() => proxyEndpoints.value.length > COMPACT_THRESHOLD);
+const collapsible = computed(() => proxyEndpoints.value.length > COLLAPSE_THRESHOLD);
+const expanded = ref(false);
+const visibleEndpoints = computed(() => {
+  if (!collapsible.value || expanded.value) return proxyEndpoints.value;
+  return proxyEndpoints.value.slice(0, COLLAPSE_VISIBLE);
+});
+const hiddenCount = computed(() =>
+  collapsible.value && !expanded.value
+    ? proxyEndpoints.value.length - COLLAPSE_VISIBLE
+    : 0,
+);
 
 function copyText(text: string, index: number) {
   navigator.clipboard?.writeText(text);
@@ -91,10 +114,13 @@ onUnmounted(() => {
   <section v-if="proxyEndpoints.length" class="endpoints-section">
     <div class="endpoints-title">{{ $t("home_endpoints_title") }}</div>
     <div
-      v-for="(ep, i) in proxyEndpoints"
+      v-for="(ep, i) in visibleEndpoints"
       :key="i"
       class="endpoint-row"
-      :class="{ connected: frpcStatus === 'connected' }"
+      :class="{
+        connected: frpcStatus === 'connected',
+        compact: isCompact,
+      }"
     >
       <div class="endpoint-meta">
         <span class="endpoint-name" :class="{ 'name-fail': isFailed(i) }">
@@ -104,9 +130,10 @@ onUnmounted(() => {
             :title="healthTitle(i)"
             :aria-label="healthTitle(i)"
           ></span>
-          <span>{{ ep.name }}</span><span
+          <span class="endpoint-name-text">{{ ep.name }}</span><span
             v-if="isFailed(i)"
             class="endpoint-reason"
+            :title="healthFor(i)?.message"
           >（{{ healthFor(i)?.message }}）</span>
         </span>
         <span class="endpoint-url mono" :title="ep.url">{{ ep.url }}</span>
@@ -122,6 +149,17 @@ onUnmounted(() => {
         <Copy v-else :size="14" />
       </button>
     </div>
+    <button
+      v-if="collapsible"
+      class="endpoint-collapse-btn"
+      @click="expanded = !expanded"
+    >
+      {{
+        expanded
+          ? $t("home_endpoint_collapse")
+          : $t("home_endpoint_expand_more", { count: hiddenCount })
+      }}
+    </button>
   </section>
 </template>
 
@@ -176,6 +214,59 @@ onUnmounted(() => {
   font-size: 11px;
   font-weight: 500;
   opacity: 0.85;
+}
+
+/* 紧凑模式：单行布局，name 左、url 自适应中段（截断保留 title 悬浮） */
+.endpoint-row.compact {
+  padding: 6px 10px;
+  margin-bottom: 4px;
+}
+.endpoint-row.compact .endpoint-meta {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.endpoint-row.compact .endpoint-name {
+  flex-shrink: 0;
+  max-width: 45%;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+.endpoint-row.compact .endpoint-name-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.endpoint-row.compact .endpoint-url {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 折叠兜底按钮：条目超出阈值时收起剩余，点击就地展开 */
+.endpoint-collapse-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 2px;
+  border: 1px dashed hsl(var(--border));
+  border-radius: calc(var(--radius) - 2px);
+  background: transparent;
+  color: hsl(var(--muted-foreground));
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+.endpoint-collapse-btn:hover {
+  background: hsl(var(--accent));
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--accent-foreground) / 0.3);
 }
 .health-dot {
   width: 7px;
