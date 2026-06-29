@@ -24,7 +24,7 @@
 
 ---
 
-![MoonProxy 主界面：4 态圆形状态按钮 + 公网访问地址 + 端点健康指示](./screenshots/main-mv.gif)
+![MoonProxy 主界面：4 态圆形状态按钮 + 公网访问地址 + 端点健康指示](./screenshots/main-zh.webp)
 
 面向非技术用户的 **[frp](https://github.com/fatedier/frp) 桌面 GUI 客户端**。
 你只需要提供一台运行了 frps 的服务器（自建或社区公开均可），剩下的交给 MoonProxy：
