@@ -4,7 +4,6 @@ import type { FrpcConfig, ProxyConfig } from "../types";
 
 /** 用户配置：服务商 + 代理规则。由 `commands/config.ts` 从 `config.store.json` 加载 / 写回。 */
 export const config = reactive<FrpcConfig>({
-  provider_id: "",
   custom_name: "",
   server_addr: "",
   server_port: 7000,
@@ -31,7 +30,6 @@ export function isConfigured(): boolean {
  */
 export function toArgs() {
   return {
-    provider_id: (config.provider_id ?? "").trim() || null,
     custom_name: (config.custom_name ?? "").trim() || null,
     server_addr: (config.server_addr ?? "").trim(),
     server_port: Number(config.server_port),

@@ -71,8 +71,6 @@ export default {
 
   // 服务商 Tab
   provider_section_title: "服务商",
-  provider_label: "服务商",
-  provider_custom_fallback: "自定义",
   provider_label_custom_name: "服务商名称",
   provider_label_server_addr: "服务器地址",
   provider_label_server_port: "端口号",
@@ -99,8 +97,8 @@ export default {
   provider_test_err_empty: "请先填写服务器地址和端口",
   provider_btn_import: "从配置导入",
   provider_import_title: "从 frpc 配置导入",
-  provider_import_desc: "粘贴 frpc 配置片段（仅支持 serverAddr / serverPort / auth.token / user 这 4 行官方驼峰格式）",
-  provider_import_ph: "serverAddr = \"server.example.com\"\nserverPort = 7000\nauth.token = \"your-token\"\nuser = \"your-name\"",
+  provider_import_desc: "粘贴 frpc 配置片段（支持 serverAddr / serverPort / auth.token / user 这 4 行官方驼峰格式；可选 serverName 指定服务商名称）",
+  provider_import_ph: "serverName = \"我的服务商\"\nserverAddr = \"server.example.com\"\nserverPort = 7000\nauth.token = \"your-token\"\nuser = \"your-name\"",
   provider_import_err_no_addr: "未找到 serverAddr 字段",
   provider_import_err_no_port: "未找到 serverPort 字段",
   provider_import_err_no_token: "未找到 auth.token 字段",
@@ -108,7 +106,6 @@ export default {
   provider_import_err_port_invalid: "serverPort 必须是 1-65535 的整数",
   provider_import_ok: "已从配置导入，请检查后点底部保存",
   provider_import_default_name: "导入的服务商",
-  provider_import_disabled_tip: "请先切换到自定义服务商",
 
   // 代理 Tab
   proxy_section_title: "代理规则",

@@ -73,11 +73,10 @@ src-tauri/
 
 ### 3.1 `StartArgs` / `ProxyConfig`（`types.rs`）
 
-- `StartArgs` 字段：`provider_id` / `custom_name`（自定义服务商语义）+ `server_addr` / `server_port` / `token` / `user` / `proxies`
+- `StartArgs` 字段：`custom_name`（自定义服务商语义）+ `server_addr` / `server_port` / `token` / `user` / `proxies`
 - 字段命名严格 snake_case
-- `provider_id` / `custom_name` / `token` / `user` 为 `Option<String>`：前端在
+- `custom_name` / `token` / `user` 为 `Option<String>`：前端在
   `toArgs()` 中空字符串 → `null`；后端据此决定是否写入 `auth.token` / `user` 字段
-  并区分内置 / 自定义服务商
 - `ProxyConfig` 按 frp 官方各类型 schema 拆分为 `#[serde(tag = "type")]` 的内部标签 enum：
   - `tcp` / `udp` variant：`name` / `local_ip` / `local_port` / `remote_port`
     （frp 接受 `remotePort`，**不接受** `customDomains`）

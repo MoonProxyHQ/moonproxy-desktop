@@ -37,7 +37,6 @@ moonproxy-desktop/
 │   │   ├── runtime.ts            # 运行时：frpc 状态 / 日志 / 启动时间
 │   │   ├── config.ts             # 服务商 / 代理配置
 │   │   ├── prefs.ts              # 偏好：语言 / 启动项 / 定时
-│   │   └── builtin-providers.ts  # 内置服务商列表
 │   ├── styles.css                # HSL 设计令牌 + 通用组件类
 │   ├── composables/              # 按主题拆分的可复用状态 / 命令
 │   │   ├── useToast.ts

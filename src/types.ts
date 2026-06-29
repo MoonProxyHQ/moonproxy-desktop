@@ -51,29 +51,12 @@ export type ProxyConfig =
     };
 
 export interface FrpcConfig {
-  provider_id: string;
   custom_name: string;
   server_addr: string;
   server_port: number;
   token: string;
   user: string;
   proxies: ProxyConfig[];
-}
-
-/**
- * 服务商：内置不可改地址/端口；自定义可全部编辑。
- * 内置服务商 id 必须以 "builtin:" 前缀开头，便于与自定义 id 区分。
- */
-export interface Provider {
-  id: string;
-  name: string;
-  builtin: boolean;
-  server_addr: string;
-  server_port: number;
-  /** 可选：内置服务商 JSON 不必填（运行时兜底为 ""）；自定义时为用户输入的 user 字段。 */
-  user?: string;
-  /** 用户名是否必填；false 时 UI 隐藏用户名输入框。 */
-  username_required: boolean;
 }
 
 /**

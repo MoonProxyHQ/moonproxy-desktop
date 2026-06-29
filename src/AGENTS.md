@@ -22,13 +22,12 @@
 src/
 ├── main.ts                       # 挂载入口；按 URL `?view=logs` 分流到 LogsWindow，否则挂 App
 ├── App.vue                       # 主窗顶层壳：TitleBar + 视图路由 + 全局键盘/右键监听；事件订阅已抽到 useAppEvents
-├── types.ts                      # 前后端共享类型（ProxyConfig / FrpcConfig / Provider / Prefs / FrpcStatus / LogEntry）
+├── types.ts                      # 前后端共享类型（ProxyConfig / FrpcConfig / Prefs / FrpcStatus / LogEntry）
 ├── state/                        # 核心响应式状态，按主题拆分（详见 §3.2）
 │   ├── index.ts                  # 聚合 barrel：仅做 `export * from "./xxx"`，不放任何状态
 │   ├── config.ts                 # config + isConfigured + toArgs
 │   ├── prefs.ts                  # prefs（应用偏好）
 │   ├── runtime.ts                # frpcStatus / frpcError / running / logs
-│   └── builtin-providers.ts      # builtinProviders + loadBuiltinProviders
 ├── commands/                     # 按职责拆分的 invoke 封装（全部吞异常、返回 string | null | boolean）
 │   ├── config.ts                 # loadConfig / saveConfig
 │   ├── frpc.ts                   # startFrpc / stopFrpc
@@ -72,10 +71,9 @@ src/
 > 视图组件只读 + 通过封装的命令函数修改。
 >
 > - `types.ts`：前后端共享类型（snake_case，与 Rust 一一对应）
-> - `state/` 子目录：核心响应式状态，按主题拆为 `config` / `prefs` / `runtime` /
->   `builtin-providers` 四个模块；统一经 `state/index.ts` barrel 暴露；
->   `isConfigured` / `toArgs` 留在 `state/config.ts`（仅服务 config）；
->   其中 `builtinProviders` 由 `public/builtin-providers.json` 异步加载（详见 §3.2）
+> - `state/` 子目录：核心响应式状态，按主题拆为 `config` / `prefs` / `runtime`
+>   三个模块；统一经 `state/index.ts` barrel 暴露；
+>   `isConfigured` / `toArgs` 留在 `state/config.ts`（仅服务 config）
 > - `commands/config.ts` / `commands/frpc.ts` / `commands/prefs.ts`：按职责拆分的 invoke 封装
 > - `composables/useFrpcUpdate.ts`：frpc 引擎自更新相关状态
 > - `composables/useAppUpdate.ts`：应用本体自更新相关状态
@@ -97,17 +95,10 @@ type ProxyConfig =
   | { type: "http" | "https"; name: string; local_ip: string;
       local_port: number; custom_domains: string[] };
 interface FrpcConfig {
-  provider_id: string;   // 内置服务商 id（"builtin:..."）或 "custom"
   custom_name: string;   // 自定义服务商显示名称
   server_addr: string; server_port: number;
   token: string; user: string;
   proxies: ProxyConfig[];
-}
-interface Provider {
-  id: string; name: string; builtin: boolean;
-  server_addr: string; server_port: number;
-  user?: string;            // 可选：内置服务商 JSON 不必填（运行时兜底 ""）；自定义时为 user 字段
-  username_required: boolean; // 用户名是否必填；false 时 UI 隐藏用户名输入框
 }
 interface Prefs {
   auto_launch: boolean;  // 开机启动（OS 实际状态）
@@ -157,12 +148,6 @@ interface LogEntry {
 | `frpcError`   | `Ref<string \| null>`             | 进入 `error` 时的提示文案；状态变更即清空             |
 | `running`     | `ComputedRef<boolean>`            | **派生**：`frpcStatus.value !== 'stopped'`；保留以兼容旧调用点 |
 | `logs`        | `ShallowReactive<LogEntry[]>`     | 实时日志缓冲（前端自带 500 条上限）                   |
-
-**`state/builtin-providers.ts`**：
-
-| 标识                  | 类型                              | 含义                                                  |
-| --------------------- | --------------------------------- | ----------------------------------------------------- |
-| `builtinProviders`    | `Ref<Provider[]>`                 | 内置服务商清单；模块加载时通过 `fetch('./builtin-providers.json')` 异步加载（Vite `public/` → 打包后位于 dist 根），失败时保持空数组；加载逻辑见 `loadBuiltinProviders()` |
 
 **`composables/useFrpcUpdate.ts`**：
 
@@ -250,7 +235,7 @@ if (err) showToast(err, "error");
 ### 3.4 序列化到后端 `StartArgs`
 
 `toArgs()`（`state/config.ts`）在写入 / 启动时统一 trim / Number 化，**空字符串
-→ `null`**（后端据此决定是否写入 `auth.token` / `user` 字段，以及区分内置 / 自定义服务商）。
+→ `null`**（后端据此决定是否写入 `auth.token` / `user` 字段）。
 
 ## 4. 与后端的事件协议
 

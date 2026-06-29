@@ -12,10 +12,7 @@ use serde::{Deserialize, Serialize};
 /// 决定是否写入对应 TOML 字段（详见 `config::build_toml`）。
 #[derive(Deserialize, Serialize, Clone)]
 pub struct StartArgs {
-    /// 内置服务商 id（"builtin:..."）或 "custom"
-    #[serde(default)]
-    pub provider_id: Option<String>,
-    /// 自定义服务商显示名（仅当 `provider_id == "custom"` 时有意义）
+    /// 自定义服务商显示名
     #[serde(default)]
     pub custom_name: Option<String>,
     /// FRP 服务端地址，例如 frp.example.com

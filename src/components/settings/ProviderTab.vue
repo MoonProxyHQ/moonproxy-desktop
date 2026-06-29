@@ -4,45 +4,15 @@ import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from
 import { useI18n } from "vue-i18n";
 import { invoke } from "@tauri-apps/api/core";
 import { Eye, EyeOff } from "@lucide/vue";
-import { builtinProviders, config } from "../../state";
+import { config } from "../../state";
 import { saveConfig } from "../../commands/config";
-import type { Provider } from "../../types";
 import { useToast } from "../../composables/useToast";
 import Toast from "../Toast.vue";
 
 const { t: $t } = useI18n();
 const { toast, showToast } = useToast();
 
-const CUSTOM_ID = "custom";
-
-/** 当前可选服务商列表（内置 + 自定义） */
-const providers = computed<Provider[]>(() => [
-  ...builtinProviders.value,
-  {
-    id: CUSTOM_ID,
-    name: (config.custom_name ?? "").trim() || $t("provider_custom_fallback"),
-    builtin: false,
-    server_addr: config.server_addr,
-    server_port: config.server_port,
-    user: config.user,
-    username_required: true,
-  },
-]);
-
-/** 推断初始选中的服务商：已保存的优先；地址命中内置则用该内置；默认落到第一个内置 */
-function resolveInitialId(): string {
-  if (config.provider_id) {
-    if (builtinProviders.value.some((p) => p.id === config.provider_id)) return config.provider_id;
-    if (config.provider_id === CUSTOM_ID) return CUSTOM_ID;
-  }
-  const hit = builtinProviders.value.find(
-    (p) => p.server_addr === config.server_addr && p.server_port === config.server_port,
-  );
-  return hit ? hit.id : (builtinProviders.value[0]?.id ?? CUSTOM_ID);
-}
-
 const form = reactive({
-  provider_id: resolveInitialId(),
   custom_name: config.custom_name ?? "",
   server_addr: config.server_addr,
   server_port: config.server_port,
@@ -141,28 +111,6 @@ watch(
   },
 );
 
-/** 当前选中的服务商对象（内置只读，自定义可编辑） */
-const currentProvider = computed<Provider | undefined>(() =>
-  providers.value.find((p) => p.id === form.provider_id),
-);
-
-const isBuiltin = computed(() => currentProvider.value?.builtin === true);
-const isCustom = computed(() => form.provider_id === CUSTOM_ID);
-const isUsernameRequired = computed(() => currentProvider.value?.username_required === true);
-
-/** 切换到内置服务商时，把地址/端口同步到表单（只读显示） */
-watch(
-  () => form.provider_id,
-  (id) => {
-    const p = providers.value.find((x) => x.id === id);
-    if (!p) return;
-    form.server_addr = p.server_addr;
-    form.server_port = p.server_port;
-    form.user = p.user ?? "";
-  },
-  { immediate: true },
-);
-
 function onlyNumber(e: KeyboardEvent) {
   if (e.ctrlKey || e.metaKey) return;
   const allowed = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab", "Enter"];
@@ -200,15 +148,10 @@ function clearError(field: FieldName) {
 }
 
 function validate(): ValidationError | null {
-  if (isCustom.value) {
-    if (!form.custom_name.trim()) return { field: "custom_name", message: $t("provider_err_custom_name") };
-    if (!form.server_addr.trim()) return { field: "server_addr", message: $t("provider_err_server_addr") };
-    if (!form.server_port || form.server_port <= 0) return { field: "server_port", message: $t("provider_err_server_port") };
-  } else {
-    if (!form.server_addr.trim()) return { field: "server_addr", message: $t("provider_err_server_addr") };
-    if (!form.server_port || form.server_port <= 0) return { field: "server_port", message: $t("provider_err_server_port") };
-    if (isUsernameRequired.value && !form.user.trim()) return { field: "user", message: $t("provider_err_user") };
-  }
+  if (!form.custom_name.trim()) return { field: "custom_name", message: $t("provider_err_custom_name") };
+  if (!form.server_addr.trim()) return { field: "server_addr", message: $t("provider_err_server_addr") };
+  if (!form.server_port || form.server_port <= 0) return { field: "server_port", message: $t("provider_err_server_port") };
+  if (!form.user.trim()) return { field: "user", message: $t("provider_err_user") };
   return null;
 }
 
@@ -224,8 +167,7 @@ async function onSave() {
   }
   fieldError.value = null;
   saving.value = true;
-  config.provider_id = form.provider_id === CUSTOM_ID ? CUSTOM_ID : form.provider_id;
-  config.custom_name = isCustom.value ? form.custom_name.trim() : "";
+  config.custom_name = form.custom_name.trim();
   config.server_addr = form.server_addr.trim();
   config.server_port = Number(form.server_port);
   config.token = form.token.trim();
@@ -250,16 +192,20 @@ interface ParsedServerConfig {
   server_port: number;
   token: string;
   user: string;
+  /** 可选：用户在配置片段里用 `serverName` 指定的服务商名称。 */
+  server_name?: string;
 }
 
 // 行匹配用 `m` 标志按行扫描；等号两侧空格、行首行尾空格都容忍。
 // 字符串值用双引号包裹（TOML 规范），端口必须是裸数字。
+const RE_NAME = /^\s*serverName\s*=\s*"([^"]*)"\s*$/m;
 const RE_ADDR = /^\s*serverAddr\s*=\s*"([^"]*)"\s*$/m;
 const RE_PORT = /^\s*serverPort\s*=\s*(\d+)\s*$/m;
 const RE_TOKEN = /^\s*auth\.token\s*=\s*"([^"]*)"\s*$/m;
 const RE_USER = /^\s*user\s*=\s*"([^"]*)"\s*$/m;
 
 function parseServerConfig(text: string): ParsedServerConfig | string {
+  const name = text.match(RE_NAME);
   const addr = text.match(RE_ADDR);
   const port = text.match(RE_PORT);
   const token = text.match(RE_TOKEN);
@@ -278,7 +224,14 @@ function parseServerConfig(text: string): ParsedServerConfig | string {
     return $t("provider_import_err_port_invalid");
   }
 
-  return { server_addr, server_port, token: token[1], user: user[1] };
+  const server_name = name ? name[1].trim() : "";
+  return {
+    server_addr,
+    server_port,
+    token: token[1],
+    user: user[1],
+    ...(server_name ? { server_name } : {}),
+  };
 }
 
 const showImportModal = ref(false);
@@ -286,7 +239,6 @@ const importText = ref("");
 const importError = ref<string | null>(null);
 
 function openImport() {
-  if (!isCustom.value) return;
   importText.value = "";
   importError.value = null;
   showImportModal.value = true;
@@ -303,9 +255,11 @@ function confirmImport() {
     importError.value = result;
     return;
   }
-  // 按钮仅在自定义可用，provider_id 已是 CUSTOM_ID；这里不改 provider_id 避免触发
-  // 表单同步 watch 把 server_addr / port / user 刷回 config 当前值。
-  if (!form.custom_name.trim()) {
+  // serverName 优先：用户在配置片段里显式指定了服务商名称就直接采用；
+  // 否则保留已填名称，仍为空才回退到默认文案。
+  if (result.server_name) {
+    form.custom_name = result.server_name;
+  } else if (!form.custom_name.trim()) {
     form.custom_name = $t("provider_import_default_name");
   }
   form.server_addr = result.server_addr;
@@ -337,43 +291,27 @@ onUnmounted(() => window.removeEventListener("keydown", onImportKeydown));
     <section class="card section-card">
       <div class="section-title">{{ $t("provider_section_title") }}</div>
       <div class="form-grid">
-        <div class="provider-row">
-          <label class="form-item provider-select">
-            <span class="label">{{ $t("provider_label") }}</span>
-            <select class="input select" v-model="form.provider_id">
-              <option
-                v-for="p in providers"
-                :key="p.id"
-                :value="p.id"
-              >
-                {{ p.name }}
-              </option>
-            </select>
-          </label>
-          <label v-if="isCustom" class="form-item provider-name">
-            <span class="label">{{ $t("provider_label_custom_name") }}</span>
-            <input
-              class="input"
-              :class="{ 'is-invalid': isInvalid('custom_name') }"
-              :ref="setInputRef('custom_name')"
-              v-model="form.custom_name"
-              :placeholder="$t('provider_ph_custom_name')"
-              maxlength="32"
-              @input="clearError('custom_name')"
-            />
-          </label>
-        </div>
+        <label class="form-item span-2">
+          <span class="label">{{ $t("provider_label_custom_name") }}</span>
+          <input
+            class="input"
+            :class="{ 'is-invalid': isInvalid('custom_name') }"
+            :ref="setInputRef('custom_name')"
+            v-model="form.custom_name"
+            :placeholder="$t('provider_ph_custom_name')"
+            maxlength="32"
+            @input="clearError('custom_name')"
+          />
+        </label>
 
         <label class="form-item">
           <span class="label">{{ $t("provider_label_server_addr") }}</span>
           <input
             class="input"
-            :class="{ readonly: isBuiltin, 'is-invalid': isInvalid('server_addr') }"
+            :class="{ 'is-invalid': isInvalid('server_addr') }"
             :ref="setInputRef('server_addr')"
             v-model="form.server_addr"
             :placeholder="$t('provider_ph_server_addr')"
-            :readonly="isBuiltin"
-            :disabled="isBuiltin"
             @input="clearError('server_addr')"
           />
         </label>
@@ -381,26 +319,24 @@ onUnmounted(() => window.removeEventListener("keydown", onImportKeydown));
           <span class="label">{{ $t("provider_label_server_port") }}</span>
           <input
             class="input"
-            :class="{ readonly: isBuiltin, 'is-invalid': isInvalid('server_port') }"
+            :class="{ 'is-invalid': isInvalid('server_port') }"
             :ref="setInputRef('server_port')"
             v-model.number="form.server_port"
             type="number"
             min="1"
             max="65535"
-            :readonly="isBuiltin"
-            :disabled="isBuiltin"
             @keydown="onlyNumber"
             @input="clearError('server_port')"
           />
         </label>
-        <label v-if="isCustom || isUsernameRequired" class="form-item">
+        <label class="form-item">
           <span class="label">{{ $t("provider_label_user") }}</span>
           <input
             class="input"
             :class="{ 'is-invalid': isInvalid('user') }"
             :ref="setInputRef('user')"
             v-model="form.user"
-            :placeholder="isUsernameRequired ? $t('provider_ph_user_required') : $t('provider_ph_user_optional')"
+            :placeholder="$t('provider_ph_user_required')"
             @input="clearError('user')"
           />
         </label>
@@ -434,8 +370,6 @@ onUnmounted(() => window.removeEventListener("keydown", onImportKeydown));
         <button
           type="button"
           class="btn btn-outline"
-          :disabled="!isCustom"
-          :title="isCustom ? '' : $t('provider_import_disabled_tip')"
           @click="openImport"
         >
           {{ $t('provider_btn_import') }}
@@ -527,19 +461,6 @@ onUnmounted(() => window.removeEventListener("keydown", onImportKeydown));
   grid-template-columns: 3fr 1fr;
   gap: 10px;
 }
-.provider-row {
-  grid-column: span 2;
-  display: flex;
-  gap: 10px;
-}
-.provider-select {
-  flex: 1;
-  min-width: 0;
-}
-.provider-name {
-  flex: 2;
-  min-width: 0;
-}
 .form-item {
   display: flex;
   flex-direction: column;
@@ -552,13 +473,6 @@ onUnmounted(() => window.removeEventListener("keydown", onImportKeydown));
   font-size: 12px;
   color: hsl(var(--muted-foreground));
   font-weight: 500;
-}
-.input.readonly,
-.input:read-only,
-.input:disabled {
-  background: hsl(var(--muted));
-  color: hsl(var(--muted-foreground));
-  cursor: not-allowed;
 }
 /* 校验失败时输入框红色外边框 + 同色微光——与 ProxyTab 的 .input.is-invalid 视觉一致 */
 .input.is-invalid {
@@ -600,15 +514,6 @@ onUnmounted(() => window.removeEventListener("keydown", onImportKeydown));
 .password-toggle:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px hsl(var(--ring) / 0.12);
-}
-.select {
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M3 4.5l3 3 3-3' fill='none' stroke='%23999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  padding-right: 28px;
-  cursor: pointer;
 }
 .tab-footer {
   display: flex;
@@ -689,8 +594,8 @@ onUnmounted(() => window.removeEventListener("keydown", onImportKeydown));
 }
 .import-textarea {
   width: 100%;
-  min-height: 120px;
-  max-height: 240px;
+  min-height: 180px;
+  max-height: 360px;
   padding: 8px 10px;
   border: 1px solid hsl(var(--border));
   border-radius: calc(var(--radius) - 2px);
