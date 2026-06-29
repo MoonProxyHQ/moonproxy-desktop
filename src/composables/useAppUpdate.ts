@@ -16,7 +16,7 @@ export interface AppUpdateInfo {
 }
 
 /** 应用本体版本号（三处同步：`tauri.conf.json` / `package.json` / `Cargo.toml`）；本文件即 `APP_VERSION` 的定义位置 */
-export const APP_VERSION = "1.0.1";
+export const APP_VERSION = "1.1.0";
 
 /** 检测到的新版本；null 表示无更新或尚未检查 */
 export const appUpdateAvailable = ref<AppUpdateInfo | null>(null);
