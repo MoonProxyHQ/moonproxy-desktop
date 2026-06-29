@@ -64,12 +64,12 @@ async function onToggle() {
   position: relative;
 }
 
-/* 系统设置齿轮：浮动在主页右上角，与下方 ControlBar 视觉分两行 */
+/* 系统设置齿轮：浮在 ControlBar 卡片右上角内侧（与卡片 padding 对齐） */
 .home-settings-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 5;
+  top: 25px;
+  right: 14px;
+  z-index: 10;
   width: 30px;
   height: 30px;
   border-radius: 6px;
@@ -90,19 +90,22 @@ async function onToggle() {
 .home-body {
   flex: 1;
   overflow-y: auto;
-  padding: 14px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   /* 滚动不传染外层；触底不弹跳 */
   overscroll-behavior: contain;
 }
 
+/* 错误提示卡片：与列表卡片节奏一致 */
 .error-msg {
   color: hsl(var(--destructive));
   font-size: 12px;
-  padding: 8px 12px;
-  background-color: hsl(var(--destructive) / 0.08);
-  border-radius: calc(var(--radius) - 2px);
+  padding: 10px 14px;
+  background-color: hsl(var(--destructive) / 0.06);
+  border: 1px solid hsl(var(--destructive) / 0.2);
+  border-radius: var(--radius);
+  font-weight: 500;
 }
 </style>

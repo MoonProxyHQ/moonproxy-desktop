@@ -63,7 +63,11 @@ const toggleAria  = computed(() => $t(STATUS_KEYS[frpcStatus.value].aria));
   display: flex;
   align-items: center;
   gap: 10px;
+  margin: 12px 12px 0;
   padding: 10px 50px 10px 14px;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
   flex-shrink: 0;
 }
 

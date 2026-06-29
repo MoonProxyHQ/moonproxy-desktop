@@ -56,9 +56,11 @@ const scheduleSummary = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  margin: 0 12px 12px;
   padding: 10px 14px 12px;
-  border-top: 1px solid hsl(var(--border) / 0.6);
-  background: hsl(var(--secondary) / 0.25);
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
 }
 .status-item {
   display: flex;

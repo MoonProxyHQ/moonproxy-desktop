@@ -60,7 +60,7 @@ src/
 │       ├── ScheduleSection.vue   # 定时连接：主开关 + 星期选择 + 起止时间 + 校验 + 保存
 │       └── UpdatesTab.vue
 └── views/
-    ├── HomeView.vue              # 主面板：纯组装（浮动齿轮 + ControlBar + GuideCard + ProxyList + SystemStatus + 错误条 + 启停逻辑）
+    ├── HomeView.vue              # 主面板：纯组装（浮动齿轮 + ControlBar + GuideCard + ProxyList + SystemStatus + 错误条 + 启停逻辑）；统一卡片化版面节奏（gap 10 / 卡片 padding 12 / 圆角 var(--radius) / 边框 hsl(var(--border))）
     ├── SettingsView.vue          # 设置面板：分段控件 + Tab 切换（日志入口上移到 TitleBar）
     └── LogsWindow.vue            # 独立日志窗口根组件：get_logs 拉历史 + listen 实时；不复用 App.vue 的关闭/快捷键逻辑
 ```
@@ -285,10 +285,10 @@ HomeView 本身是纯组装壳层，所有"实时"职责拆到 `components/home/
 
 | 子件 | 职责 |
 | --- | --- |
-| `ControlBar.vue` | 顶部横向控制条（~56px）：胶囊状状态按钮（高 36px，图标 + 主标，4 态语义色 + CSS 呼吸光晕 connected 3s 绿 / connecting 1s 黄）+ 右侧外置副提示；只 emit `click`，启停逻辑由 `HomeView.vue` 处理；齿轮由 HomeView 顶部浮动按钮承担（与 ControlBar 上下分离） |
-| `ProxyList.vue` | 公网访问地址列表 + 健康点 + 复制按钮 + 3s 健康轮询（自管理 onMounted/onUnmounted）；按代理类型分支生成地址：`http`/`https` → `${type}://${custom_domains[0]}`（未配域名时回退到 name 占位），`tcp`/`udp` → `${server_addr}:${remote_port}`；点击地址复制到剪贴板（`navigator.clipboard?.writeText`，失败静默） |
+| `ControlBar.vue` | 顶部卡片化控制条（~56px，外包白卡 + 边框 + 圆角 + margin 12）：胶囊状状态按钮（高 36px，图标 + 主标，4 态语义色 + CSS 呼吸光晕 connected 3s 绿 / connecting 1s 黄）+ 右侧外置副提示；只 emit `click`，启停逻辑由 `HomeView.vue` 处理；齿轮由 HomeView 顶部浮动按钮承担（嵌在 ControlBar 卡片右上角内侧） |
+| `ProxyList.vue` | 卡片化公网访问地址列表（外层白卡 + 边框 + 圆角 + padding 12）+ 健康点 + 复制按钮 + 3s 健康轮询（自管理 onMounted/onUnmounted）；按代理类型分支生成地址：`http`/`https` → `${type}://${custom_domains[0]}`（未配域名时回退到 name 占位），`tcp`/`udp` → `${server_addr}:${remote_port}`；点击地址复制到剪贴板（`navigator.clipboard?.writeText`，失败静默） |
 | `GuideCard.vue` | 未配置引导卡片；emit `settings` |
-| `SystemStatus.vue` | 底部只读系统状态栏：开机启动状态 + 定时连接摘要 |
+| `SystemStatus.vue` | 底部只读系统状态卡片（外层白卡 + 边框 + 圆角 + margin 12）：开机启动状态 + 定时连接摘要 |
 
 - 独立日志窗口（`LogsWindow.vue`）打开时调用 `get_logs` 拉历史，再
   `listen<LogEntry>("frpc://log")` 实时追加；新条目入栈后 `nextTick` 滚到底

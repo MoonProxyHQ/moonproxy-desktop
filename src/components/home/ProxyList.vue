@@ -167,13 +167,17 @@ onUnmounted(() => {
 .endpoints-section {
   display: flex;
   flex-direction: column;
+  padding: 12px;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
 }
 .endpoints-title {
   font-size: 12px;
   font-weight: 600;
   color: hsl(var(--muted-foreground));
   margin-bottom: 8px;
-  padding: 0 4px;
+  padding: 0 2px;
 }
 .endpoint-row {
   display: flex;
