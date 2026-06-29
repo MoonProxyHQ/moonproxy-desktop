@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ComponentPublicInstance } from "vue";
-import { computed, nextTick, reactive, ref, watch } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { invoke } from "@tauri-apps/api/core";
 import { Eye, EyeOff } from "@lucide/vue";
@@ -235,6 +235,101 @@ async function onSave() {
   if (e) showToast($t("msg_save_failed", { err: e }), "error", 4000);
   else showToast($t("msg_save_success"), "success", 1200);
 }
+
+/**
+ * 从 frpc 配置片段解析服务端连接字段。
+ *
+ * 仅识别 frpc 官方驼峰平铺格式（serverAddr / serverPort / auth.token / user）；
+ * 老式下划线（server_addr）与嵌套 `[auth]` 块不识别——主公明确选了严格模式，
+ * 减少歧义与误识别。
+ *
+ * 返回值：成功返回对象，失败返回面向用户的错误文案。
+ */
+interface ParsedServerConfig {
+  server_addr: string;
+  server_port: number;
+  token: string;
+  user: string;
+}
+
+// 行匹配用 `m` 标志按行扫描；等号两侧空格、行首行尾空格都容忍。
+// 字符串值用双引号包裹（TOML 规范），端口必须是裸数字。
+const RE_ADDR = /^\s*serverAddr\s*=\s*"([^"]*)"\s*$/m;
+const RE_PORT = /^\s*serverPort\s*=\s*(\d+)\s*$/m;
+const RE_TOKEN = /^\s*auth\.token\s*=\s*"([^"]*)"\s*$/m;
+const RE_USER = /^\s*user\s*=\s*"([^"]*)"\s*$/m;
+
+function parseServerConfig(text: string): ParsedServerConfig | string {
+  const addr = text.match(RE_ADDR);
+  const port = text.match(RE_PORT);
+  const token = text.match(RE_TOKEN);
+  const user = text.match(RE_USER);
+
+  if (!addr) return $t("provider_import_err_no_addr");
+  if (!port) return $t("provider_import_err_no_port");
+  if (!token) return $t("provider_import_err_no_token");
+  if (!user) return $t("provider_import_err_no_user");
+
+  const server_addr = addr[1].trim();
+  const server_port = Number(port[1]);
+
+  if (!server_addr) return $t("provider_import_err_no_addr");
+  if (!Number.isInteger(server_port) || server_port < 1 || server_port > 65535) {
+    return $t("provider_import_err_port_invalid");
+  }
+
+  return { server_addr, server_port, token: token[1], user: user[1] };
+}
+
+const showImportModal = ref(false);
+const importText = ref("");
+const importError = ref<string | null>(null);
+
+function openImport() {
+  if (!isCustom.value) return;
+  importText.value = "";
+  importError.value = null;
+  showImportModal.value = true;
+}
+
+function closeImport() {
+  showImportModal.value = false;
+  importError.value = null;
+}
+
+function confirmImport() {
+  const result = parseServerConfig(importText.value);
+  if (typeof result === "string") {
+    importError.value = result;
+    return;
+  }
+  // 按钮仅在自定义可用，provider_id 已是 CUSTOM_ID；这里不改 provider_id 避免触发
+  // 表单同步 watch 把 server_addr / port / user 刷回 config 当前值。
+  if (!form.custom_name.trim()) {
+    form.custom_name = $t("provider_import_default_name");
+  }
+  form.server_addr = result.server_addr;
+  form.server_port = result.server_port;
+  form.token = result.token;
+  form.user = result.user;
+  importError.value = null;
+  showImportModal.value = false;
+  showToast($t("provider_import_ok"), "success", 2500);
+}
+
+function onImportKeydown(e: KeyboardEvent) {
+  if (!showImportModal.value) return;
+  if (e.key === "Escape") {
+    e.preventDefault();
+    closeImport();
+  } else if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+    e.preventDefault();
+    confirmImport();
+  }
+}
+
+onMounted(() => window.addEventListener("keydown", onImportKeydown));
+onUnmounted(() => window.removeEventListener("keydown", onImportKeydown));
 </script>
 
 <template>
@@ -339,6 +434,15 @@ async function onSave() {
         <button
           type="button"
           class="btn btn-outline"
+          :disabled="!isCustom"
+          :title="isCustom ? '' : $t('provider_import_disabled_tip')"
+          @click="openImport"
+        >
+          {{ $t('provider_btn_import') }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline"
           :disabled="latencyStatus === 'testing'"
           @click="onTestLatency"
         >
@@ -354,6 +458,50 @@ async function onSave() {
         {{ saving ? $t("common_saving") : $t("common_save") }}
       </button>
     </footer>
+
+    <Teleport to="body">
+      <div
+        v-if="showImportModal"
+        class="import-mask"
+        @click.self="closeImport"
+      >
+        <div
+          class="import-card"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="import-title"
+        >
+          <button
+            class="import-x"
+            type="button"
+            :aria-label="$t('common_cancel')"
+            :title="$t('common_cancel')"
+            @click="closeImport"
+          >×</button>
+          <div id="import-title" class="import-title">
+            {{ $t('provider_import_title') }}
+          </div>
+          <p class="import-desc">{{ $t('provider_import_desc') }}</p>
+          <textarea
+            v-model="importText"
+            class="import-textarea"
+            :placeholder="$t('provider_import_ph')"
+            spellcheck="false"
+            autocomplete="off"
+            autofocus
+          ></textarea>
+          <p v-if="importError" class="import-error">{{ importError }}</p>
+          <div class="import-actions">
+            <button type="button" class="btn btn-outline" @click="closeImport">
+              {{ $t('common_cancel') }}
+            </button>
+            <button type="button" class="btn btn-primary" @click="confirmImport">
+              {{ $t('common_save') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
 
     <Toast :toast="toast" />
   </div>
@@ -489,5 +637,85 @@ async function onSave() {
 }
 .latency-pending {
   color: hsl(var(--muted-foreground));
+}
+
+/* 从 frpc 配置导入弹窗：与 CloseConfirm 共用遮罩 + 卡片视觉语言 */
+.import-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.import-card {
+  position: relative;
+  width: 420px;
+  max-width: calc(100vw - 32px);
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 20px 20px 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+.import-x {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: transparent;
+  border: none;
+  color: hsl(var(--muted-foreground));
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: default;
+}
+.import-x:hover {
+  background: hsl(var(--accent));
+}
+.import-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  padding-right: 24px;
+}
+.import-desc {
+  font-size: 12px;
+  line-height: 1.6;
+  color: hsl(var(--muted-foreground));
+  margin: 0 0 10px;
+}
+.import-textarea {
+  width: 100%;
+  min-height: 120px;
+  max-height: 240px;
+  padding: 8px 10px;
+  border: 1px solid hsl(var(--border));
+  border-radius: calc(var(--radius) - 2px);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+}
+.import-textarea:focus {
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.12);
+}
+.import-error {
+  font-size: 12px;
+  color: hsl(var(--destructive));
+  margin: 8px 0 0;
+}
+.import-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 14px;
 }
 </style>

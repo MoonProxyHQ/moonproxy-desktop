@@ -97,6 +97,18 @@ export default {
   provider_test_fail_refused: "Connection refused",
   provider_test_fail_unreachable: "Cannot reach server",
   provider_test_err_empty: "Please fill in server address and port first",
+  provider_btn_import: "Import from config",
+  provider_import_title: "Import from frpc config",
+  provider_import_desc: "Paste a frpc config snippet (only the official camelCase form for serverAddr / serverPort / auth.token / user is supported)",
+  provider_import_ph: "serverAddr = \"server.example.com\"\nserverPort = 7000\nauth.token = \"your-token\"\nuser = \"your-name\"",
+  provider_import_err_no_addr: "Missing serverAddr field",
+  provider_import_err_no_port: "Missing serverPort field",
+  provider_import_err_no_token: "Missing auth.token field",
+  provider_import_err_no_user: "Missing user field",
+  provider_import_err_port_invalid: "serverPort must be an integer between 1 and 65535",
+  provider_import_ok: "Imported from config — review and click Save",
+  provider_import_default_name: "Imported provider",
+  provider_import_disabled_tip: "Switch to a custom provider first",
 
   // Proxy tab
   proxy_section_title: "Proxy rules",
