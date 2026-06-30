@@ -35,6 +35,7 @@ src-tauri/
 │   ├── lib.rs                # Tauri Builder 配置 + setup hook + invoke_handler + ExitRequested 兜底（业务全部抽到子模块）
 │   ├── types.rs              # 共享类型：StartArgs / ProxyConfig
 │   ├── config.rs             # frpc.toml 生成（build_toml / escape_toml）+ 配置持久化命令（save/load_config）
+│   ├── context_menu.rs       # 输入框原生右键编辑菜单（show_edit_menu：剪切/复制/粘贴/全选）
 │   ├── process.rs            # frpc 子进程生命周期（start/stop_frpc / frpc_running/status / get_logs / reap_orphan_frpc）
 │   ├── frpc_state.rs         # 连接状态机：FrpcConnState / FrpcState / poll_conn_state + emit_log
 │   ├── proxy_health.rs       # 代理本地端口连通性探测（probe_proxy / check_proxies_health）
@@ -65,6 +66,7 @@ src-tauri/
 | `save_prefs`                  | `prefs: Prefs`                    | `Result<(), String>`              | `prefs.rs`        |
 | `set_auto_launch`             | `enabled: bool`                   | `Result<bool, String>`            | `prefs.rs`        |
 | `get_auto_launch`             | —                                 | `Result<bool, String>`            | `prefs.rs`        |
+| `show_edit_menu`              | `window: Window`（Tauri 注入）    | `Result<(), String>`              | `context_menu.rs` |
 
 > **前端类型映射注脚**：`load_config` 后端返回 `Result<Option<StartArgs>, String>`，
 > 前端 `src/commands/config.ts::loadConfig` 映射为 `Promise<boolean>`——`Some`

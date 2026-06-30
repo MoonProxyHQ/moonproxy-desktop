@@ -14,6 +14,7 @@ use tauri::{Manager, RunEvent};
 use tauri_plugin_autostart::MacosLauncher;
 
 use config::{load_config, save_config};
+use context_menu::show_edit_menu;
 use frpc_state::FrpcState;
 use frpc_update::{
     apply_pending_frpc_update, apply_pending_update, check_frpc_update, download_frpc_update,
@@ -26,6 +27,7 @@ use proxy_health::check_proxies_health;
 use tray::init_tray;
 
 mod config;
+mod context_menu;
 mod frpc_state;
 mod frpc_update;
 mod latency;
@@ -103,7 +105,8 @@ pub fn run() {
             get_prefs,
             save_prefs,
             set_auto_launch,
-            get_auto_launch
+            get_auto_launch,
+            show_edit_menu
         ])
         .build(tauri::generate_context!())
         .expect("error while building tauri application")

@@ -10,11 +10,15 @@ import CloseConfirm from "./components/CloseConfirm.vue";
 import UpdateBanners from "./components/banners/UpdateBanners.vue";
 import { useAppEvents } from "./composables/useAppEvents";
 import { installAppUpdate } from "./composables/useAppUpdate";
+import { showEditMenu } from "./commands/contextMenu";
+import Toast from "./components/Toast.vue";
+import { useToast } from "./composables/useToast";
 
 type View = "home" | "settings" | "services";
 const currentView = ref<View>("home");
 
 const { showCloseConfirm } = useAppEvents();
+const { toast, showToast } = useToast();
 
 function goSettings() {
   currentView.value = "settings";
@@ -60,14 +64,38 @@ function onKeydown(e: KeyboardEvent) {
   }
 }
 
-/** 屏蔽浏览器原生右键菜单（桌面应用惯例） */
-function onContextMenu(e: MouseEvent) {
+// 防 async 弹菜单期间重复右键导致并发 popup_menu
+let editMenuPending = false;
+
+/** 桌面化右键：可编辑元素弹原生编辑菜单，其余区域屏蔽浏览器默认菜单 */
+async function onContextMenu(e: MouseEvent) {
+  const t = e.target;
+  if (
+    t instanceof HTMLInputElement ||
+    t instanceof HTMLTextAreaElement ||
+    t instanceof HTMLSelectElement ||
+    (t instanceof HTMLElement && t.isContentEditable)
+  ) {
+    // 阻止 WebView 默认菜单，避免与原生菜单双弹
+    e.preventDefault();
+    if (editMenuPending) return; // 防重入
+    editMenuPending = true;
+    try {
+      // 同步聚焦右键目标，确保 PredefinedMenuItem 作用于它而非旧焦点
+      t.focus();
+      const err = await showEditMenu();
+      if (err) showToast(err, "error", 2500);
+    } finally {
+      editMenuPending = false;
+    }
+    return;
+  }
   e.preventDefault();
 }
 
 onMounted(() => {
-  window.addEventListener("keydown", onKeydown, { passive: true });
-  window.addEventListener("contextmenu", onContextMenu, { passive: true });
+  window.addEventListener("keydown", onKeydown);
+  window.addEventListener("contextmenu", onContextMenu);
 });
 
 onUnmounted(() => {
@@ -84,6 +112,7 @@ onUnmounted(() => {
     <ServicesView v-else-if="currentView === 'services'" @back="goHome" />
     <SettingsView v-else @back="goHome" />
     <CloseConfirm v-model="showCloseConfirm" />
+    <Toast :toast="toast" />
   </div>
 </template>
 

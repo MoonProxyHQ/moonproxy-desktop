@@ -30,6 +30,7 @@ src/
 │   ├── runtime.ts                # frpcStatus / frpcError / running / logs
 ├── commands/                     # 按职责拆分的 invoke 封装（全部吞异常、返回 string | null | boolean）
 │   ├── config.ts                 # loadConfig / saveConfig
+│   ├── contextMenu.ts            # showEditMenu（输入框原生右键编辑菜单）
 │   ├── frpc.ts                   # startFrpc / stopFrpc
 │   └── prefs.ts                  # loadPrefs / savePrefs / setAutoLaunch / refreshAutoLaunch
 ├── styles.css                    # 设计令牌（HSL）+ 通用组件类（.btn / .input / .card / .badge）
@@ -202,6 +203,12 @@ interface LogEntry {
 | `savePrefs()`              | `save_prefs`               | 持久化偏好（不触发 OS 动作，仅写 store）   |
 | `setAutoLaunch(b)`         | `set_auto_launch`          | 写 OS 启动项并以 OS 实际状态回填 prefs     |
 | `refreshAutoLaunch()`      | `get_auto_launch`          | 启动时校正 OS 实际开机启动状态到 prefs     |
+
+**`commands/contextMenu.ts`**：
+
+| 函数                       | 对应后端 `invoke`          | 用途                                       |
+| -------------------------- | -------------------------- | ------------------------------------------ |
+| `showEditMenu()`           | `show_edit_menu`           | 弹出原生编辑菜单（剪切/复制/粘贴/全选），仅 input/textarea/select 右键时调 |
 
 **`composables/useFrpcUpdate.ts`**：
 
@@ -385,7 +392,7 @@ function isFailed(i)     // 仅 ok=false 时为 true（用于行高亮等）
 
 - `body { user-select: none; overscroll-behavior: none; -webkit-user-drag: none; }`
 - `input/textarea/select` 显式允许 `user-select: text`
-- 全局监听 `contextmenu` 阻止默认菜单（`App.vue` 中 `onContextMenu`）
+- 右键菜单：可编辑元素（input/textarea/select）弹原生编辑菜单（剪切/复制/粘贴/全选，后端 `show_edit_menu`），其余区域阻止默认菜单（`App.vue::onContextMenu`）
 - 全局快捷键（`App.vue::onKeydown`）：
   - `Cmd/Ctrl + W`：关闭窗口（统一走 `App.vue::onCloseRequested` 钩子；frpc 运行时弹 `CloseConfirm.vue` 确认，详见后端 `src-tauri/AGENTS.md` §10.2）
   - `Cmd/Ctrl + M`：原生最小化到任务栏（与 `CloseConfirm` 中的 `hide()` 到托盘语义不同，互不冲突）
