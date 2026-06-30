@@ -43,7 +43,7 @@ src/
 │   ├── useAppEvents.ts           # 应用级事件订阅 + 启动初始化（App.vue 已委托）
 │   └── useLogsWindow.ts          # 打开/聚焦独立日志窗口（WebviewWindow label="logs"）
 ├── components/
-│   ├── TitleBar.vue              # 跨平台标题栏：mac 交通灯避让、Win 最小化/关闭、拖动区；仅 home 视图右槽渲染「服务」「设置」两图标按钮
+│   ├── TitleBar.vue              # 跨平台标题栏：mac 交通灯避让、Win 最小化/关闭、拖动区；仅 home 视图渲染「服务」「设置」两图标按钮（macOS 右槽 / Windows 左槽）
 │   ├── CloseConfirm.vue          # frpc 运行时的关闭确认弹窗（最小化 / 退出）
 │   ├── Toast.vue                 # 顶部 Toast 渲染
 │   ├── home/                     # HomeView 拆出的子组件（详见 §5.4）
@@ -311,9 +311,10 @@ HomeView 本身是纯组装壳层，所有"实时"职责拆到 `components/home/
 - Windows：右槽额外渲染最小化 / 关闭按钮，`-webkit-app-region: no-drag`
 - 拖动区使用 `data-tauri-drag-region` + `.slot-center > * { pointer-events: none }`
   防止标题文字吞掉拖动手势
-- 右槽按钮：仅 `home` 视图渲染「服务」（Server 图标）+「设置」（Settings 图标）
-  两个图标按钮，点击 emit `services` / `settings`；`services` / `settings`
-  子视图右槽无功能按钮，仅 Windows 窗口控件
+- 「服务」（Server 图标）+「设置」（Settings 图标）两个图标按钮：仅 `home`
+  视图渲染，点击 emit `services` / `settings`；位置按 OS 分流——macOS 在右槽
+  （与左侧交通灯分立两侧），Windows 在左槽（远离右侧窗口控制按钮）；
+  `services` / `settings` 子视图无功能按钮，右槽仅 Windows 窗口控件
 
 ### 5.6 代理健康检测（HomeView）
 

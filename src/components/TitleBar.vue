@@ -23,7 +23,7 @@ async function closeWin() {
 
 <template>
   <header class="titlebar" :class="{ 'titlebar-mac': isMac, 'titlebar-win': isWin }" data-tauri-drag-region>
-    <!-- 左槽：macOS 给交通灯让位 78px；非首页视图显示返回按钮 -->
+    <!-- 左槽：macOS 给交通灯让位 78px；非首页视图显示返回按钮；Windows home 视图渲染服务/设置（远离右侧窗口控件） -->
     <div class="slot-left">
       <button
         v-if="props.view !== 'home'"
@@ -35,6 +35,14 @@ async function closeWin() {
       >
         <ArrowLeft :size="18" />
       </button>
+      <div v-else-if="isWin" class="titlebar-actions">
+        <button class="btn btn-ghost btn-icon drag-exclude" @click="emit('services')">
+          <Server :size="16" />
+        </button>
+        <button class="btn btn-ghost btn-icon drag-exclude" @click="emit('settings')">
+          <Settings :size="16" />
+        </button>
+      </div>
     </div>
 
     <!-- 中间：拖动区 + 标题（绝对居中于窗口） -->
@@ -44,9 +52,9 @@ async function closeWin() {
       <span v-else class="view-title">{{ t("settings_view_title") }}</span>
     </div>
 
-    <!-- 右槽：home 视图入口 + Windows 窗口控制 -->
+    <!-- 右槽：macOS home 视图入口 + Windows 窗口控制 -->
     <div class="slot-right">
-      <div v-if="props.view === 'home'" class="titlebar-actions">
+      <div v-if="props.view === 'home' && isMac" class="titlebar-actions">
         <button class="btn btn-ghost btn-icon drag-exclude" @click="emit('services')">
           <Server :size="16" />
         </button>
