@@ -42,7 +42,7 @@ moonproxy-desktop/
 │   │   ├── useToast.ts
 │   │   ├── useFrpcUpdate.ts      # frpc 引擎自更新
 │   │   ├── useAppUpdate.ts       # 应用本体自更新
-│   │   └── useProxyHealth.ts     # 主页端点健康点 + 3s 轮询
+│   │   └── useProxyHealth.ts     # 主页端点健康点 + 指数退避轮询（3→6→12→24s）
 │   ├── components/
 │   │   ├── TitleBar.vue          # 跨平台标题栏
 │   │   ├── CloseConfirm.vue      # frpc 运行时的关闭确认弹窗

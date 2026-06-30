@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { Check, Copy } from "@lucide/vue";
 
@@ -46,9 +46,20 @@ const proxyEndpoints = computed(() => {
   });
 });
 
+/** 退避档位：3s → 6s → 12s → 24s，4 档后封顶（3 次倍增） */
+const HEALTH_INTERVAL_MIN = 3000;
+const HEALTH_INTERVAL_MAX = 24000;
+
 const copiedIndex = ref<number | null>(null);
 let copiedTimer: ReturnType<typeof setTimeout> | null = null;
-let healthTimer: ReturnType<typeof setInterval> | null = null;
+let healthTimer: ReturnType<typeof setTimeout> | null = null;
+/** 健康检测指数退避调度状态（实例级闭包变量，不进响应式） */
+let healthPrevSig: string | null = null;
+let healthStreak = 0;
+/** 退避调度代际：每次 reset/unmount/新 tickHealth 入口自增；
+ * await 中的旧 tickHealth 完成时若代际已变即 return，避免并发循环。
+ * 范式对齐后端 frpc_state::poll_gen（src-tauri/AGENTS.md §5.5）。 */
+let healthGen = 0;
 
 const isCompact = computed(() => proxyEndpoints.value.length > COMPACT_THRESHOLD);
 const collapsible = computed(() => proxyEndpoints.value.length > COLLAPSE_THRESHOLD);
@@ -98,15 +109,67 @@ function isFailed(i: number): boolean {
   return !!h && !h.ok;
 }
 
+/** 把当前 proxyHealth 拼成签名串：所有代理 ok 值一致才算稳定。 */
+function healthSignature(): string {
+  return proxyHealth.value.map((h) => (h ? (h.ok ? "T" : "F") : "?")).join(",");
+}
+
+/** 按 streak 算下次间隔：3s·2^streak，封顶 24s */
+function nextHealthInterval(streak: number): number {
+  return Math.min(HEALTH_INTERVAL_MIN * 2 ** streak, HEALTH_INTERVAL_MAX);
+}
+
+/** 一轮探测 + 调度下一轮。整体稳定（签名不变）则递增 streak 升档；翻转则归零回 3s。
+ *  代际机制保证：await 期间若有 reset / unmount / 新一轮 tickHealth 进入，
+ *  本实例 await 返回后立即 return，不重复注册 timer（避免并发循环泄漏）。 */
+async function tickHealth() {
+  const myGen = ++healthGen;
+  await checkProxiesHealth();
+  if (myGen !== healthGen) return;
+  const sig = healthSignature();
+  if (healthPrevSig !== null && sig === healthPrevSig) {
+    healthStreak += 1;
+  } else {
+    healthStreak = 0;
+  }
+  healthPrevSig = sig;
+  healthTimer = setTimeout(tickHealth, nextHealthInterval(healthStreak));
+}
+
+/** 重置退避：bump 代际（让飞行中的 tickHealth 退出）+ 清挂起定时器 + 清状态。
+ *  调用方负责随后主动 tickHealth() 启动新一轮；空配置场景则不再启动。 */
+function resetHealthBackoff() {
+  healthGen += 1;
+  if (healthTimer) {
+    clearTimeout(healthTimer);
+    healthTimer = null;
+  }
+  healthPrevSig = null;
+  healthStreak = 0;
+}
+
 onMounted(() => {
-  // 立即跑一次，再每 3 秒轮询
-  checkProxiesHealth();
-  healthTimer = setInterval(checkProxiesHealth, 3000);
+  // 立即跑一次，随后按指数退避节奏自调度
+  tickHealth();
 });
 
+/** 代理列表增/删/改：先 reset（含 bump 代际，让飞行中的 tickHealth 退出）；
+ *  非空配置则立即重检（自然落到 3s 起步档）；空配置则仅 reset、不启新循环，
+ *  避免 proxies 删空后旧 tickHealth 以封顶 24s 节奏空转。 */
+watch(
+  () => props.proxies,
+  () => {
+    resetHealthBackoff();
+    if (!proxyEndpoints.value.length) return;
+    void tickHealth();
+  },
+  { deep: true },
+);
+
 onUnmounted(() => {
+  healthGen += 1;
   if (copiedTimer) clearTimeout(copiedTimer);
-  if (healthTimer) clearInterval(healthTimer);
+  if (healthTimer) clearTimeout(healthTimer);
 });
 </script>
 

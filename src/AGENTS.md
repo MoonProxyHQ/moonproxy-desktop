@@ -39,7 +39,7 @@ src/
 │   ├── useToast.ts               # 轻量 Toast（showToast / dismiss timer）
 │   ├── useFrpcUpdate.ts          # frpc 自更新：版本 / updateInfo / 下载 / 横幅相关
 │   ├── useAppUpdate.ts           # 应用本体自更新
-│   ├── useProxyHealth.ts         # 主页端点健康点：proxyHealth + 3s 轮询
+│   ├── useProxyHealth.ts         # 主页端点健康点：proxyHealth + 指数退避轮询（3→6→12→24s）
 │   ├── useAppEvents.ts           # 应用级事件订阅 + 启动初始化（App.vue 已委托）
 │   └── useLogsWindow.ts          # 打开/聚焦独立日志窗口（WebviewWindow label="logs"）
 ├── components/
@@ -48,7 +48,7 @@ src/
 │   ├── Toast.vue                 # 顶部 Toast 渲染
 │   ├── home/                     # HomeView 拆出的子组件（详见 §5.4）
 │   │   ├── CircleButton.vue      # 大圆按钮 + Canvas 波纹粒子系统 + 4 态文案
-│   │   ├── ProxyList.vue         # 公网访问地址列表 + 健康点 + 复制按钮 + 3s 健康轮询
+│   │   ├── ProxyList.vue         # 公网访问地址列表 + 健康点 + 复制按钮 + 指数退避健康轮询
 │   │   ├── GuideCard.vue         # 未配置引导卡片
 │   │   └── SystemStatus.vue      # 底部只读系统状态栏（开机启动 / 定时连接）
 │   ├── banners/
@@ -294,7 +294,7 @@ HomeView 本身是纯组装壳层，所有"实时"职责拆到 `components/home/
 | 子件 | 职责 |
 | --- | --- |
 | `CircleButton.vue` | 大圆按钮 + Canvas 波纹粒子系统（`useParticles(frpcStatus)`）+ 4 态文案；只 emit `click`，启停逻辑由 `HomeView.vue` 处理 |
-| `ProxyList.vue` | 公网访问地址列表 + 健康点 + 复制按钮 + 3s 健康轮询（自管理 onMounted/onUnmounted）；按代理类型分支生成地址：`http`/`https` → `${type}://${custom_domains[0]}`（未配域名时回退到 name 占位），`tcp`/`udp` → `${server_addr}:${remote_port}`；点击地址复制到剪贴板（`navigator.clipboard?.writeText`，失败静默） |
+| `ProxyList.vue` | 公网访问地址列表 + 健康点 + 复制按钮 + 指数退避健康轮询（自管理 onMounted/onUnmounted，3→6→12→24s，整体稳定升档 / 配置变化或状态翻转立即回 3s）；按代理类型分支生成地址：`http`/`https` → `${type}://${custom_domains[0]}`（未配域名时回退到 name 占位），`tcp`/`udp` → `${server_addr}:${remote_port}`；点击地址复制到剪贴板（`navigator.clipboard?.writeText`，失败静默） |
 | `GuideCard.vue` | 未配置引导卡片；emit `services` |
 | `SystemStatus.vue` | 底部只读系统状态栏：开机启动状态 + 定时连接摘要 |
 
@@ -374,8 +374,9 @@ function nextHealthInterval(streak: number) {
 >
 > **后端失败静默**：`checkProxiesHealth` 内部 `try/catch` 只 `console.warn`，
 > 不弹错误条——避免频繁轮询失败刷屏；连续失败会显示"正在检测…"，已足够提示。
-> **注意**：单次后端失败也会让 signature 翻转（proxyHealth 保持上次值），
-> 退避策略上反而回 3s 档——这是「失败应当更频繁试探」的直觉一致性，符合预期。
+> **注意**：后端失败时 `proxyHealth.value` **不会更新**（赋值在 try 块内），
+> 故 signature 与上次相同，**仍会被判为稳定继续退避**——本地端口状态本身未变，
+> 这个行为语义合理；只有真正检测出新结果（ok 值变化）时才会重置退避。
 
 #### 三类辅助函数
 
