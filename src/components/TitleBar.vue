@@ -2,6 +2,7 @@
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useI18n } from "vue-i18n";
 import { ArrowLeft, Minus, Server, Settings, X } from "@lucide/vue";
+import BrandIcon from "./BrandIcon.vue";
 
 type View = "home" | "settings" | "services";
 
@@ -46,7 +47,10 @@ async function closeWin() {
 
     <!-- 中间：拖动区 + 标题（绝对居中于窗口） -->
     <div class="slot-center">
-      <span v-if="props.view === 'home'" class="brand-name">{{ t("app_name") }}</span>
+      <span v-if="props.view === 'home'" class="brand">
+        <BrandIcon :size="14" />
+        <span class="brand-name">{{ t("app_name") }}</span>
+      </span>
       <span v-else-if="props.view === 'services'" class="view-title">{{ t("services_view_title") }}</span>
       <span v-else class="view-title">{{ t("settings_view_title") }}</span>
     </div>
@@ -162,7 +166,13 @@ async function closeWin() {
   pointer-events: auto;
 }
 
-/* Home 标题：应用名 */
+/* Home 标题：图标 + 应用名 */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: hsl(var(--foreground));
+}
 .brand-name {
   font-size: 13px;
   font-weight: 600;
