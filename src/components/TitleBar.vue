@@ -36,11 +36,11 @@ async function closeWin() {
         <ArrowLeft :size="18" />
       </button>
       <div v-else-if="isWin" class="titlebar-actions">
-        <button class="btn btn-ghost btn-icon drag-exclude" @click="emit('services')">
-          <Server :size="16" />
-        </button>
         <button class="btn btn-ghost btn-icon drag-exclude" @click="emit('settings')">
           <Settings :size="16" />
+        </button>
+        <button class="btn btn-ghost btn-icon drag-exclude" @click="emit('services')">
+          <Server :size="16" />
         </button>
       </div>
     </div>
