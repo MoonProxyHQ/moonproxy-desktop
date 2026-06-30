@@ -1,6 +1,6 @@
 [package]
 name = "moonproxy-desktop"
-version = "1.1.0"
+version = "1.1.1"
 description = "MoonProxy - a cross-platform GUI client for frp"
 authors = ["MoonProxyHQ"]
 edition = "2021"
