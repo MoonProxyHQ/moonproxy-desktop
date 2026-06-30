@@ -43,7 +43,7 @@ src/
 │   ├── useAppEvents.ts           # 应用级事件订阅 + 启动初始化（App.vue 已委托）
 │   └── useLogsWindow.ts          # 打开/聚焦独立日志窗口（WebviewWindow label="logs"）
 ├── components/
-│   ├── TitleBar.vue              # 跨平台标题栏：mac 交通灯避让、Win 最小化/关闭、拖动区；右槽按视图渲染（home→设置齿轮 / settings→日志按钮）
+│   ├── TitleBar.vue              # 跨平台标题栏：mac 交通灯避让、Win 最小化/关闭、拖动区；仅 home 视图右槽渲染「服务」「设置」两图标按钮
 │   ├── CloseConfirm.vue          # frpc 运行时的关闭确认弹窗（最小化 / 退出）
 │   ├── Toast.vue                 # 顶部 Toast 渲染
 │   ├── home/                     # HomeView 拆出的子组件（详见 §5.4）
@@ -59,10 +59,12 @@ src/
 │       ├── InterfaceTab.vue      # 界面语言切换
 │       ├── LaunchTab.vue         # 开机启动 / 静默启动 / 开机自动连接（ScheduleSection 抽出独立子件）
 │       ├── ScheduleSection.vue   # 定时连接：主开关 + 星期选择 + 起止时间 + 校验 + 保存
+│       ├── LogsTab.vue           # 运行日志
+│       ├── AboutTab.vue          # 关于
 │       └── UpdatesTab.vue
 └── views/
-    ├── HomeView.vue              # 主面板：纯组装（CircleButton + GuideCard + ProxyList + SystemStatus + 设置齿轮 + 错误条 + 启停逻辑）
-    ├── SettingsView.vue          # 设置面板：分段控件 + Tab 切换（日志入口上移到 TitleBar）
+    ├── HomeView.vue              # 主面板：纯组装（CircleButton + GuideCard + ProxyList + SystemStatus + 错误条 + 启停逻辑）
+    ├── SettingsView.vue          # 设置面板：分段控件 + Tab 切换
     └── LogsWindow.vue            # 独立日志窗口根组件：get_logs 拉历史 + listen 实时；不复用 App.vue 的关闭/快捷键逻辑
 ```
 
@@ -264,8 +266,8 @@ if (err) showToast(err, "error");
 
 ### 5.1 路由方式
 
-`App.vue` 用 `ref<View>('home' | 'settings')` + `v-if/v-else` 切视图。
-**不引入** vue-router。Esc 在 settings 视图下返回 home。
+`App.vue` 用 `ref<View>('home' | 'settings' | 'services')` + `v-if/v-else` 切视图。
+**不引入** vue-router。Esc 在非 home 视图（settings / services）下返回 home。
 
 > 独立窗口（如日志窗）不走这套机制——`main.ts` 直接读 `location.search`
 > 决定挂载哪个根组件：`?view=logs` → `LogsWindow.vue`，否则 `App.vue`。
@@ -274,7 +276,7 @@ if (err) showToast(err, "error");
 
 ### 5.2 编辑副本模式
 
-`SettingsView` 下各 Tab（`ProviderTab` / `ProxyTab` / `InterfaceTab` / `LaunchTab` / `UpdatesTab`）
+`SettingsView` 下各 Tab（`ProviderTab` / `ProxyTab` / `InterfaceTab` / `LaunchTab` / `LogsTab` / `AboutTab` / `UpdatesTab`）
 统一约定：表单绑定本地 `form` 副本，**保存时才写回 `config` / `prefs`**。
 这样用户中途取消不会污染 store，也避免每次输入触发后端写入。
 
@@ -294,7 +296,7 @@ HomeView 本身是纯组装壳层，所有"实时"职责拆到 `components/home/
 | --- | --- |
 | `CircleButton.vue` | 大圆按钮 + Canvas 波纹粒子系统（`useParticles(frpcStatus)`）+ 4 态文案；只 emit `click`，启停逻辑由 `HomeView.vue` 处理 |
 | `ProxyList.vue` | 公网访问地址列表 + 健康点 + 复制按钮 + 3s 健康轮询（自管理 onMounted/onUnmounted）；按代理类型分支生成地址：`http`/`https` → `${type}://${custom_domains[0]}`（未配域名时回退到 name 占位），`tcp`/`udp` → `${server_addr}:${remote_port}`；点击地址复制到剪贴板（`navigator.clipboard?.writeText`，失败静默） |
-| `GuideCard.vue` | 未配置引导卡片；emit `settings` |
+| `GuideCard.vue` | 未配置引导卡片；emit `services` |
 | `SystemStatus.vue` | 底部只读系统状态栏：开机启动状态 + 定时连接摘要 |
 
 - 独立日志窗口（`LogsWindow.vue`）打开时调用 `get_logs` 拉历史，再
@@ -309,8 +311,9 @@ HomeView 本身是纯组装壳层，所有"实时"职责拆到 `components/home/
 - Windows：右槽额外渲染最小化 / 关闭按钮，`-webkit-app-region: no-drag`
 - 拖动区使用 `data-tauri-drag-region` + `.slot-center > * { pointer-events: none }`
   防止标题文字吞掉拖动手势
-- 右槽按钮按视图分发：`home` 显示「设置齿轮」（emit `settings`），
-  `settings` 显示「日志」图标（调 `openLogs()` 开独立窗口）
+- 右槽按钮：仅 `home` 视图渲染「服务」（Server 图标）+「设置」（Settings 图标）
+  两个图标按钮，点击 emit `services` / `settings`；`services` / `settings`
+  子视图右槽无功能按钮，仅 Windows 窗口控件
 
 ### 5.6 代理健康检测（HomeView）
 
@@ -508,8 +511,3 @@ function xDesc(): string {
   - 「保存成功」 / 「保存失败：{err}」 → `msg_save_success` / `msg_save_failed`
 - **控件特有文案**就近命名：`launch_<控件名>_on_desc` / `_off_desc`
 - **新增 key 前必做**：`grep -r "新key名" src/locales/`，确认没有等价既有 key
-
-历史漂移示例（待统一）：
-- `launch_silent_start_blocked` 与 `launch_auto_connect_blocked` 中英文逐字符
-  相同，应合并为 `launch_blocked_dependency` 单 key。后续触碰该区域代码时
-  顺手对齐，无需专起 PR。

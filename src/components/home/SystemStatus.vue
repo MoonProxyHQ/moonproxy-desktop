@@ -30,7 +30,7 @@ const scheduleSummary = computed(() => {
 </script>
 
 <template>
-  <section class="system-status" :aria-label="$t('home_settings_title')">
+  <section class="system-status">
     <div class="status-item">
       <Power :size="13" class="status-icon" />
       <span class="status-key">{{ $t("home_status_auto_launch") }}</span>

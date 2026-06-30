@@ -106,9 +106,9 @@ onUnmounted(() => {
 
 <template>
   <div class="app-root">
-    <TitleBar :view="currentView" @back="goHome" />
+    <TitleBar :view="currentView" @back="goHome" @settings="goSettings" @services="goServices" />
     <UpdateBanners @install="onInstallApp" />
-    <HomeView v-if="currentView === 'home'" @settings="goSettings" @services="goServices" />
+    <HomeView v-if="currentView === 'home'" @services="goServices" />
     <ServicesView v-else-if="currentView === 'services'" @back="goHome" />
     <SettingsView v-else @back="goHome" />
     <CloseConfirm v-model="showCloseConfirm" />

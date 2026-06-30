@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useI18n } from "vue-i18n";
-import { ArrowLeft, Minus, X } from "@lucide/vue";
+import { ArrowLeft, Minus, Server, Settings, X } from "@lucide/vue";
 
 type View = "home" | "settings" | "services";
 
 const { t } = useI18n();
 
 const props = defineProps<{ view: View }>();
-const emit = defineEmits<{ back: [] }>();
+const emit = defineEmits<{ back: []; settings: []; services: [] }>();
 
 const isMac = navigator.userAgent.includes("Mac");
 const isWin = navigator.userAgent.includes("Win");
@@ -44,8 +44,16 @@ async function closeWin() {
       <span v-else class="view-title">{{ t("settings_view_title") }}</span>
     </div>
 
-    <!-- 右槽：Windows 窗口控制 -->
+    <!-- 右槽：home 视图入口 + Windows 窗口控制 -->
     <div class="slot-right">
+      <div v-if="props.view === 'home'" class="titlebar-actions">
+        <button class="btn btn-ghost btn-icon drag-exclude" @click="emit('services')">
+          <Server :size="16" />
+        </button>
+        <button class="btn btn-ghost btn-icon drag-exclude" @click="emit('settings')">
+          <Settings :size="16" />
+        </button>
+      </div>
       <div v-if="isWin" class="win-controls">
         <button
           class="win-btn win-btn-min drag-exclude"
@@ -84,6 +92,13 @@ async function closeWin() {
 }
 .titlebar .btn-icon {
   padding: 4px;
+}
+/* Home 视图右槽入口：紧凑水平排列 + 居中对齐，与标题栏同高 */
+.titlebar-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 100%;
 }
 .titlebar-mac {
   --left-slot: 78px; /* 给 macOS 交通灯让位 */

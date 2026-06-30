@@ -42,10 +42,6 @@ export default {
   home_guide_desc: "Open Services to set up your provider and proxy rules",
   home_guide_btn: "Configure",
 
-  // Home - top actions (Services / Settings)
-  home_settings_title: "Settings",
-  home_services_title: "Services",
-
   // Home - endpoint list
   home_endpoints_title: "Public endpoints",
   home_endpoint_health_pending: "Probing local port…",

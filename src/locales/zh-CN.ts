@@ -42,10 +42,6 @@ export default {
   home_guide_desc: "前往「服务」填写服务商信息与代理规则",
   home_guide_btn: "去配置",
 
-  // 主页 - 顶部操作（服务入口 / 设置齿轮）
-  home_settings_title: "系统设置",
-  home_services_title: "服务",
-
   // 主页 - 端点列表
   home_endpoints_title: "公网访问地址",
   home_endpoint_health_pending: "正在检测本地端口…",
