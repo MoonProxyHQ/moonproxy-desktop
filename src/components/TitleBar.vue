@@ -3,7 +3,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useI18n } from "vue-i18n";
 import { ArrowLeft, Minus, X } from "@lucide/vue";
 
-type View = "home" | "settings";
+type View = "home" | "settings" | "services";
 
 const { t } = useI18n();
 
@@ -23,10 +23,10 @@ async function closeWin() {
 
 <template>
   <header class="titlebar" :class="{ 'titlebar-mac': isMac, 'titlebar-win': isWin }" data-tauri-drag-region>
-    <!-- 左槽：macOS 给交通灯让位 78px；Windows 下 settings 显示返回按钮 -->
+    <!-- 左槽：macOS 给交通灯让位 78px；非首页视图显示返回按钮 -->
     <div class="slot-left">
       <button
-        v-if="props.view === 'settings'"
+        v-if="props.view !== 'home'"
         class="btn btn-ghost btn-icon drag-exclude"
         :class="{ 'back-mac': isMac }"
         @click="emit('back')"
@@ -40,6 +40,7 @@ async function closeWin() {
     <!-- 中间：拖动区 + 标题（绝对居中于窗口） -->
     <div class="slot-center">
       <span v-if="props.view === 'home'" class="brand-name">{{ t("app_name") }}</span>
+      <span v-else-if="props.view === 'services'" class="view-title">{{ t("services_view_title") }}</span>
       <span v-else class="view-title">{{ t("settings_view_title") }}</span>
     </div>
 

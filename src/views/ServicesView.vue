@@ -1,31 +1,25 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import InterfaceTab from "../components/settings/InterfaceTab.vue";
-import LaunchTab from "../components/settings/LaunchTab.vue";
-import UpdatesTab from "../components/settings/UpdatesTab.vue";
-import LogsTab from "../components/settings/LogsTab.vue";
-import AboutTab from "../components/settings/AboutTab.vue";
+import ProviderTab from "../components/settings/ProviderTab.vue";
+import ProxyTab from "../components/settings/ProxyTab.vue";
 
 defineEmits<{ back: [] }>();
 
-type TabKey = "interface" | "launch" | "updates" | "logs" | "about";
+type TabKey = "provider" | "proxy";
 
 const { t: $t } = useI18n();
 
 const tabs: { key: TabKey; labelKey: string }[] = [
-  { key: "launch", labelKey: "settings_tab_launch" },
-  { key: "interface", labelKey: "settings_tab_interface" },
-  { key: "updates", labelKey: "settings_tab_updates" },
-  { key: "logs", labelKey: "settings_tab_logs" },
-  { key: "about", labelKey: "settings_tab_about" },
+  { key: "provider", labelKey: "settings_tab_provider" },
+  { key: "proxy", labelKey: "settings_tab_proxy" },
 ];
 
-const activeTab = ref<TabKey>("launch");
+const activeTab = ref<TabKey>("provider");
 </script>
 
 <template>
-  <div class="settings-view">
+  <div class="services-view">
     <div class="segmented-bar">
       <div class="segmented">
         <button
@@ -40,18 +34,15 @@ const activeTab = ref<TabKey>("launch");
       </div>
     </div>
 
-    <div class="settings-body">
-      <LaunchTab v-if="activeTab === 'launch'" />
-      <InterfaceTab v-else-if="activeTab === 'interface'" />
-      <UpdatesTab v-else-if="activeTab === 'updates'" />
-      <LogsTab v-else-if="activeTab === 'logs'" />
-      <AboutTab v-else-if="activeTab === 'about'" />
+    <div class="services-body">
+      <ProviderTab v-if="activeTab === 'provider'" />
+      <ProxyTab v-else-if="activeTab === 'proxy'" />
     </div>
   </div>
 </template>
 
 <style scoped>
-.settings-view {
+.services-view {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -90,7 +81,7 @@ const activeTab = ref<TabKey>("launch");
   color: hsl(var(--foreground));
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
-.settings-body {
+.services-body {
   flex: 1;
   min-height: 0;
   display: flex;

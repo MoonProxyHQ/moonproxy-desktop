@@ -12,6 +12,7 @@ export default {
   // 应用名 / 标题
   app_name: "月神代理",
   settings_view_title: "系统设置",
+  services_view_title: "服务",
 
   // 设置面板 Tab
   settings_tab_provider: "服务商",
@@ -20,6 +21,7 @@ export default {
   settings_tab_launch: "启动",
   settings_tab_updates: "更新",
   settings_tab_logs: "日志",
+  settings_tab_about: "关于",
 
   // 主页 - 圆形按钮 4 态
   home_btn_stopped: "已停止",
@@ -37,11 +39,12 @@ export default {
 
   // 主页 - 引导卡片
   home_guide_title: "尚未配置",
-  home_guide_desc: "前往系统设置填写服务商信息与代理规则",
+  home_guide_desc: "前往「服务」填写服务商信息与代理规则",
   home_guide_btn: "去配置",
 
-  // 主页 - 设置齿轮
+  // 主页 - 顶部操作（服务入口 / 设置齿轮）
   home_settings_title: "系统设置",
+  home_services_title: "服务",
 
   // 主页 - 端点列表
   home_endpoints_title: "公网访问地址",
@@ -174,7 +177,9 @@ export default {
   // 更新 Tab
   updates_section_app: "软件更新",
   updates_section_engine: "引擎更新",
-  updates_section_about: "关于",
+
+  // 关于 Tab
+  about_section: "关于",
   about_label_app_name: "应用名称",
   about_label_homepage: "官方网站",
   about_label_maintainer: "维护团队",

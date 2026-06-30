@@ -5,18 +5,23 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import TitleBar from "./components/TitleBar.vue";
 import HomeView from "./views/HomeView.vue";
 import SettingsView from "./views/SettingsView.vue";
+import ServicesView from "./views/ServicesView.vue";
 import CloseConfirm from "./components/CloseConfirm.vue";
 import UpdateBanners from "./components/banners/UpdateBanners.vue";
 import { useAppEvents } from "./composables/useAppEvents";
 import { installAppUpdate } from "./composables/useAppUpdate";
 
-type View = "home" | "settings";
+type View = "home" | "settings" | "services";
 const currentView = ref<View>("home");
 
 const { showCloseConfirm } = useAppEvents();
 
 function goSettings() {
   currentView.value = "settings";
+}
+
+function goServices() {
+  currentView.value = "services";
 }
 
 function goHome() {
@@ -48,8 +53,8 @@ function onKeydown(e: KeyboardEvent) {
     getCurrentWindow().minimize();
     return;
   }
-  // Esc：settings 视图返回 home
-  if (e.key === "Escape" && currentView.value === "settings") {
+  // Esc：非首页视图（设置 / 服务）返回 home
+  if (e.key === "Escape" && currentView.value !== "home") {
     e.preventDefault();
     goHome();
   }
@@ -75,7 +80,8 @@ onUnmounted(() => {
   <div class="app-root">
     <TitleBar :view="currentView" @back="goHome" />
     <UpdateBanners @install="onInstallApp" />
-    <HomeView v-if="currentView === 'home'" @settings="goSettings" />
+    <HomeView v-if="currentView === 'home'" @settings="goSettings" @services="goServices" />
+    <ServicesView v-else-if="currentView === 'services'" @back="goHome" />
     <SettingsView v-else @back="goHome" />
     <CloseConfirm v-model="showCloseConfirm" />
   </div>

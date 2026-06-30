@@ -12,6 +12,7 @@ export default {
   // App / title
   app_name: "MoonProxy",
   settings_view_title: "Settings",
+  services_view_title: "Services",
 
   // Settings tabs
   settings_tab_provider: "Provider",
@@ -20,6 +21,7 @@ export default {
   settings_tab_launch: "Launch",
   settings_tab_updates: "Updates",
   settings_tab_logs: "Logs",
+  settings_tab_about: "About",
 
   // Home - big button 4 states
   home_btn_stopped: "Stopped",
@@ -37,11 +39,12 @@ export default {
 
   // Home - guide card
   home_guide_title: "Not configured",
-  home_guide_desc: "Open settings to set up your provider and proxy rules",
+  home_guide_desc: "Open Services to set up your provider and proxy rules",
   home_guide_btn: "Configure",
 
-  // Home - settings gear
+  // Home - top actions (Services / Settings)
   home_settings_title: "Settings",
+  home_services_title: "Services",
 
   // Home - endpoint list
   home_endpoints_title: "Public endpoints",
@@ -174,7 +177,9 @@ export default {
   // Updates tab
   updates_section_app: "Application update",
   updates_section_engine: "Engine update",
-  updates_section_about: "About",
+
+  // About tab
+  about_section: "About",
   about_label_app_name: "Application",
   about_label_homepage: "Homepage",
   about_label_maintainer: "Maintained by",

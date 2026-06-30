@@ -2,7 +2,7 @@
 import { useI18n } from "vue-i18n";
 import { Layers } from "@lucide/vue";
 
-defineEmits<{ settings: [] }>();
+defineEmits<{ services: [] }>();
 
 const { t: $t } = useI18n();
 </script>
@@ -16,7 +16,7 @@ const { t: $t } = useI18n();
       <div class="guide-title">{{ $t("home_guide_title") }}</div>
       <div class="guide-desc">{{ $t("home_guide_desc") }}</div>
     </div>
-    <button class="btn btn-primary btn-sm" @click="$emit('settings')">{{ $t("home_guide_btn") }}</button>
+    <button class="btn btn-primary btn-sm" @click="$emit('services')">{{ $t("home_guide_btn") }}</button>
   </section>
 </template>
 
