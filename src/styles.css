@@ -44,6 +44,7 @@ body,
   margin: 0;
   padding: 0;
   height: 100%;
+  overflow: hidden; /* 钉死顶层视口：WKWebView 主 scrollView 无内容可弹，杜绝 rubber-band */
   background-color: hsl(var(--background));
 }
 

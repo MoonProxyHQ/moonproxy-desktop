@@ -96,6 +96,7 @@ const activeTab = ref<TabKey>("launch");
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  overscroll-behavior: none; /* 禁用滚动链与触底回弹 */
   padding: 8px 14px 14px;
 }
 </style>

@@ -208,7 +208,7 @@ watch(
   line-height: 1.6;
   background: hsl(var(--muted) / 0.3);
   border-radius: var(--radius);
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
 }
 .logline {
   white-space: pre-wrap;

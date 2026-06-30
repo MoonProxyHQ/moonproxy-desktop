@@ -134,8 +134,8 @@ async function onToggle() {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  /* 滚动不传染外层；触底不弹跳 */
-  overscroll-behavior: contain;
+  /* 滚动不传染外层；触底不弹跳（none：阻链式 + 阻弹跳）*/
+  overscroll-behavior: none;
 }
 
 .error-msg {
