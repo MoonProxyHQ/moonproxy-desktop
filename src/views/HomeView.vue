@@ -56,12 +56,13 @@ async function onToggle() {
 
 .home-body {
   flex: 1;
-  overflow-y: auto;
+  /* 本层不滚动：顶部流量卡片固定高度、中部端点列表在自身容器内滚动，
+     底部启动按钮 + 状态栏始终可见。 */
+  overflow: hidden;
   padding: 14px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  /* 滚动不传染外层；触底不弹跳（none：阻链式 + 阻弹跳）*/
   overscroll-behavior: none;
 }
 

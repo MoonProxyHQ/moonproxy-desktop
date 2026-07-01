@@ -38,7 +38,7 @@ export default {
   home_guide_btn: "Configure",
 
   // Home - endpoint list
-  home_endpoints_title: "Public endpoints",
+  home_endpoints_title: "Public addresses",
   home_endpoint_health_pending: "Probing local port…",
   home_endpoint_health_ok: "Local port reachable: {msg}",
   home_endpoint_health_fail: "Local port unreachable: {msg}",

@@ -38,7 +38,7 @@ export default {
   home_guide_btn: "去配置",
 
   // 主页 - 端点列表
-  home_endpoints_title: "公网访问地址",
+  home_endpoints_title: "公网地址",
   home_endpoint_health_pending: "正在检测本地端口…",
   home_endpoint_health_ok: "本地端口可达：{msg}",
   home_endpoint_health_fail: "本地端口异常：{msg}",

@@ -155,6 +155,7 @@ onBeforeUnmount(() => {
   gap: 8px;
   padding: 8px 10px;
   min-width: 0;
+  flex-shrink: 0; /* 固定高度，不参与 flex 收缩，确保始终 130px */
   height: 130px; /* 两行布局：指标行 + 图表行 */
   /* overflow:hidden 兜底：即便 Chart.js 时序异常撑出 canvas，
      也裁切在卡片内部，绝不溢出到下方 ProxyList */

@@ -17,16 +17,6 @@ const props = defineProps<{
 
 const { t: $t } = useI18n();
 
-/** 密度档位阈值。
- *
- * - ≤ COMPACT_THRESHOLD：双行宽松布局（name / url 各占一行）
- * - > COMPACT_THRESHOLD：紧凑单行布局，提升单屏容量
- * - > COLLAPSE_THRESHOLD：在紧凑模式基础上折叠剩余条目，留出兜底入口
- */
-const COMPACT_THRESHOLD = 3;
-const COLLAPSE_THRESHOLD = 12;
-const COLLAPSE_VISIBLE = 8;
-
 /** 生成每条代理的公网访问地址。
  *
  * - tcp/udp：`<server_addr>:<remote_port>`——frp 直接转发端口
@@ -60,19 +50,6 @@ let healthStreak = 0;
  * await 中的旧 tickHealth 完成时若代际已变即 return，避免并发循环。
  * 范式对齐后端 frpc_state::poll_gen（src-tauri/AGENTS.md §5.5）。 */
 let healthGen = 0;
-
-const isCompact = computed(() => proxyEndpoints.value.length > COMPACT_THRESHOLD);
-const collapsible = computed(() => proxyEndpoints.value.length > COLLAPSE_THRESHOLD);
-const expanded = ref(false);
-const visibleEndpoints = computed(() => {
-  if (!collapsible.value || expanded.value) return proxyEndpoints.value;
-  return proxyEndpoints.value.slice(0, COLLAPSE_VISIBLE);
-});
-const hiddenCount = computed(() =>
-  collapsible.value && !expanded.value
-    ? proxyEndpoints.value.length - COLLAPSE_VISIBLE
-    : 0,
-);
 
 function copyText(text: string, index: number) {
   navigator.clipboard?.writeText(text);
@@ -176,58 +153,50 @@ onUnmounted(() => {
 <template>
   <section v-if="proxyEndpoints.length" class="endpoints-section">
     <div class="endpoints-title">{{ $t("home_endpoints_title") }}</div>
-    <div
-      v-for="(ep, i) in visibleEndpoints"
-      :key="i"
-      class="endpoint-row"
-      :class="{
-        connected: frpcStatus === 'connected',
-        compact: isCompact,
-      }"
-    >
-      <div class="endpoint-meta">
-        <span class="endpoint-name" :class="{ 'name-fail': isFailed(i) }">
-          <span
-            class="health-dot"
-            :class="healthClass(i)"
-            :title="healthTitle(i)"
-            :aria-label="healthTitle(i)"
-          ></span>
-          <span class="endpoint-name-text">{{ ep.name }}</span><span
-            v-if="isFailed(i)"
-            class="endpoint-reason"
-            :title="healthFor(i)?.message"
-          >（{{ healthFor(i)?.message }}）</span>
-        </span>
-        <span class="endpoint-url mono" :title="ep.url">{{ ep.url }}</span>
-      </div>
-      <button
-        class="copy-btn"
-        :class="{ copied: copiedIndex === i }"
-        :title="copiedIndex === i ? $t('home_endpoint_copied') : $t('home_endpoint_copy')"
-        :aria-label="copiedIndex === i ? $t('home_endpoint_copied') : $t('home_endpoint_copy_aria', { url: ep.url })"
-        @click="copyText(ep.url, i)"
+    <div class="endpoints-scroll">
+      <div
+        v-for="(ep, i) in proxyEndpoints"
+        :key="i"
+        class="endpoint-row"
+        :class="{ connected: frpcStatus === 'connected' }"
       >
-        <Check v-if="copiedIndex === i" :size="14" :stroke-width="2.5" />
-        <Copy v-else :size="14" />
-      </button>
+        <div class="endpoint-meta">
+          <span class="endpoint-name" :class="{ 'name-fail': isFailed(i) }">
+            <span
+              class="health-dot"
+              :class="healthClass(i)"
+              :title="healthTitle(i)"
+              :aria-label="healthTitle(i)"
+            ></span>
+            <span class="endpoint-name-text">{{ ep.name }}</span><span
+              v-if="isFailed(i)"
+              class="endpoint-reason"
+              :title="healthFor(i)?.message"
+            >（{{ healthFor(i)?.message }}）</span>
+          </span>
+          <span class="endpoint-url mono" :title="ep.url">{{ ep.url }}</span>
+        </div>
+        <button
+          class="copy-btn"
+          :class="{ copied: copiedIndex === i }"
+          :title="copiedIndex === i ? $t('home_endpoint_copied') : $t('home_endpoint_copy')"
+          :aria-label="copiedIndex === i ? $t('home_endpoint_copied') : $t('home_endpoint_copy_aria', { url: ep.url })"
+          @click="copyText(ep.url, i)"
+        >
+          <Check v-if="copiedIndex === i" :size="14" :stroke-width="2.5" />
+          <Copy v-else :size="14" />
+        </button>
+      </div>
     </div>
-    <button
-      v-if="collapsible"
-      class="endpoint-collapse-btn"
-      @click="expanded = !expanded"
-    >
-      {{
-        expanded
-          ? $t("home_endpoint_collapse")
-          : $t("home_endpoint_expand_more", { count: hiddenCount })
-      }}
-    </button>
   </section>
 </template>
 
 <style scoped>
 .endpoints-section {
+  /* 占据流量卡片与启动按钮之间的剩余空间：标题固定在顶，
+     端点行在 .endpoints-scroll 内部滚动。min-height:0 是 flex 子项可收缩的关键。 */
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
 }
@@ -237,6 +206,17 @@ onUnmounted(() => {
   color: hsl(var(--muted-foreground));
   margin-bottom: 8px;
   padding: 0 4px;
+  flex-shrink: 0;
+}
+.endpoints-scroll {
+  /* 端点行的独立滚动容器：少量端点 safe center 垂直居中；
+     端点溢出时 safe 回退顶部对齐并内部滚动，标题与外层卡片/按钮始终固定。 */
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  overflow-y: auto;
 }
 .endpoint-row {
   display: flex;
@@ -279,58 +259,6 @@ onUnmounted(() => {
   opacity: 0.85;
 }
 
-/* 紧凑模式：单行布局，name 左、url 自适应中段（截断保留 title 悬浮） */
-.endpoint-row.compact {
-  padding: 6px 10px;
-  margin-bottom: 4px;
-}
-.endpoint-row.compact .endpoint-meta {
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-}
-.endpoint-row.compact .endpoint-name {
-  flex-shrink: 0;
-  max-width: 45%;
-  overflow: hidden;
-  white-space: nowrap;
-  flex-wrap: nowrap;
-}
-.endpoint-row.compact .endpoint-name-text {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.endpoint-row.compact .endpoint-url {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-/* 折叠兜底按钮：条目超出阈值时收起剩余，点击就地展开 */
-.endpoint-collapse-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 8px 12px;
-  margin-top: 2px;
-  border: 1px dashed hsl(var(--border));
-  border-radius: calc(var(--radius) - 2px);
-  background: transparent;
-  color: hsl(var(--muted-foreground));
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
-}
-.endpoint-collapse-btn:hover {
-  background: hsl(var(--accent));
-  color: hsl(var(--foreground));
-  border-color: hsl(var(--accent-foreground) / 0.3);
-}
 .health-dot {
   width: 7px;
   height: 7px;
