@@ -31,6 +31,7 @@
   "plugins": {
     "updater": {
       "endpoints": [
+        "https://__CLOUDFRONT_DOMAIN__/latest.json",
         "https://github.com/MoonProxyHQ/moonproxy-desktop/releases/latest/download/latest.json"
       ],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEZBOUNDQTkwRDZERUQ2MkMKUldRczF0N1drTXFjK3NxZEtIQjd0cGdtcFhDOHprTUhwckpUbGNybTJSZWU0aDZaSkNFUCt1Qi8K"
