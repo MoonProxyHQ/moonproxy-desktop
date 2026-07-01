@@ -14,7 +14,7 @@ const { t: $t } = useI18n();
 const { toast, showToast } = useToast();
 
 /** 代理规则数量上限；达到后隐藏「添加代理」按钮。 */
-const MAX_PROXIES = 5;
+const MAX_PROXIES = 50;
 
 /** 校验失败时定位到的字段名（与 ProxyForm 对应）。 */
 type FieldName = "name" | "local_ip" | "local_port" | "remote_port" | "custom_domain";
