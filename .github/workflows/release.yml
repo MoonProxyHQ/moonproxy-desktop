@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    name: build-${{ matrix.target }}
+    name: build-${{ matrix.target }}${{ matrix.store && '-store' || '' }}
     strategy:
       fail-fast: false
       matrix:
@@ -18,12 +18,19 @@ jobs:
           - target: aarch64-apple-darwin
             os: macos-latest
             args: --target aarch64-apple-darwin
+            store: false
           - target: x86_64-apple-darwin
             os: macos-latest
             args: --target x86_64-apple-darwin
+            store: false
           - target: x86_64-pc-windows-msvc
             os: windows-latest
             args: --target x86_64-pc-windows-msvc
+            store: false
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            args: --target x86_64-pc-windows-msvc
+            store: true
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -68,6 +75,7 @@ jobs:
           grep -A5 '"updater"' src-tauri/tauri.conf.json
 
       - name: Build (tauri-action)
+        if: ${{ !matrix.store }}
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -82,7 +90,15 @@ jobs:
           assetNamePattern: "MoonProxy_[version]_[arch][setup][ext]"
           args: ${{ matrix.args }}
 
+      - name: Build Store package (offline WebView2)
+        if: ${{ matrix.store }}
+        shell: bash
+        run: |
+          pnpm tauri build --no-bundle ${{ matrix.args }}
+          pnpm tauri bundle --config src-tauri/tauri.microsoftstore.conf.json ${{ matrix.args }}
+
       - name: Collect updater artifacts
+        if: ${{ !matrix.store }}
         shell: bash
         run: |
           mkdir -p updater-artifacts
@@ -105,6 +121,7 @@ jobs:
           fi
 
       - name: Collect installable artifacts (DMG / EXE)
+        if: ${{ !matrix.store }}
         shell: bash
         run: |
           mkdir -p release-artifacts
@@ -115,7 +132,19 @@ jobs:
             \) \
             -exec cp {} release-artifacts/ \;
 
+      - name: Collect Store artifact
+        if: ${{ matrix.store }}
+        shell: bash
+        run: |
+          mkdir -p store-artifacts
+          find src-tauri/target/${{ matrix.target }}/release/bundle/nsis \
+            -type f -name "*-setup.exe" \
+            -exec cp {} store-artifacts/ \;
+          echo "=== Store artifacts ==="
+          ls -lh store-artifacts/
+
       - name: Upload updater artifacts
+        if: ${{ !matrix.store }}
         uses: actions/upload-artifact@v4
         with:
           name: updater-${{ matrix.target }}
@@ -123,10 +152,19 @@ jobs:
           retention-days: 1
 
       - name: Upload release artifacts
+        if: ${{ !matrix.store }}
         uses: actions/upload-artifact@v4
         with:
           name: release-${{ matrix.target }}
           path: release-artifacts/
+          retention-days: 1
+
+      - name: Upload Store artifact
+        if: ${{ matrix.store }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: store-x64
+          path: store-artifacts/
           retention-days: 1
 
   publish:
@@ -246,3 +284,73 @@ jobs:
           gh release upload "$TAG" gh-release-files/* --clobber
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-store:
+    name: publish-store
+    needs: build
+    runs-on: windows-latest
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION_ID }}
+
+      - name: Download Store artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: store-x64
+          path: store-pkg/
+
+      - name: Upload Store EXE to S3
+        shell: bash
+        run: |
+          TAG="${{ github.ref_name }}"
+          find store-pkg/ -name "*-setup.exe" | while read -r f; do
+            filename=$(basename "$f")
+            aws s3 cp "$f" \
+              "s3://${{ secrets.S3_BUCKET }}/store/$TAG/$filename" \
+              --cache-control "public, max-age=31536000, immutable"
+            echo "Uploaded s3://${{ secrets.S3_BUCKET }}/store/$TAG/$filename"
+          done
+
+      - name: Setup MSStore CLI
+        uses: microsoft/microsoft-store-apppublisher@v1.2
+
+      - name: Publish to Microsoft Store
+        shell: bash
+        run: |
+          TAG="${{ github.ref_name }}"
+
+          STORE_KEY=$(aws s3api list-objects \
+            --bucket "${{ secrets.S3_BUCKET }}" \
+            --prefix "store/$TAG/" \
+            --query 'Contents[?ends_with(Key, `setup.exe`)].Key' \
+            --output text | head -1)
+
+          if [ -z "$STORE_KEY" ]; then
+            echo "No Store EXE found in S3 under store/$TAG/" >&2
+            exit 1
+          fi
+
+          PUBLIC_URL="https://${{ secrets.CLOUDFRONT_DOMAIN }}/$STORE_KEY"
+          echo "Submitting to Store: $PUBLIC_URL"
+
+          msstore reconfigure \
+            --tenantId "${{ secrets.PARTNER_CENTER_TENANT_ID }}" \
+            --sellerId "${{ secrets.PARTNER_CENTER_SELLER_ID }}" \
+            --clientId "${{ secrets.PARTNER_CENTER_CLIENT_ID }}" \
+            --clientSecret "${{ secrets.PARTNER_CENTER_CLIENT_SECRET }}"
+
+          msstore submission update "${{ secrets.PARTNER_CENTER_PRODUCT_ID }}" \
+            "{\"packages\":[{
+              \"packageUrl\":\"$PUBLIC_URL\",
+              \"languages\":[\"zh-hans\",\"en\"],
+              \"architectures\":[\"X64\"],
+              \"installerParameters\":\"/S\",
+              \"isSilentInstall\":true
+            }]}"
+
+          msstore submission publish "${{ secrets.PARTNER_CENTER_PRODUCT_ID }}"
