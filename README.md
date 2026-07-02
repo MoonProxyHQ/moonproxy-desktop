@@ -151,6 +151,27 @@ pnpm tauri build      # 当前平台打包
 | 💬 问题反馈与讨论 | [GitHub Issues](https://github.com/MoonProxyHQ/moonproxy-desktop/issues) · [Discussions](https://github.com/MoonProxyHQ/moonproxy-desktop/discussions) |
 | 🛠 开发协作文档 | [AGENTS.md](./AGENTS.md) |
 
+## 相关项目
+
+以下是与 MoonProxy 同属 FRP / 内网穿透生态的项目，按"互补 vs 同类"分组：
+
+### 同类 FRP GUI 客户端
+
+- [luckjiawei/frpc-desktop](https://github.com/luckjiawei/frpc-desktop) — 跨平台 FRP 桌面客户端（Flutter），同样定位
+- [koho/frpmgr](https://github.com/koho/frpmgr) — Windows 平台 FRP 管理器（C#）
+- [codemonkey-m/FrpClient-Win](https://github.com/codemonkey-m/FrpClient-Win) — frpc Windows GUI 客户端
+- [hidumou/frpc-gui](https://github.com/hidumou/frpc-gui) — 现代化跨平台 frpc GUI
+
+### FRP 生态互补工具
+
+- [fatedier/frp](https://github.com/fatedier/frp) — FRP 协议本体（MoonProxy 的引擎）
+- [VaalaCat/frp-panel](https://github.com/VaalaCat/frp-panel) — 多节点 frp web 管理面板
+- [AceDroidX/frp-Android](https://github.com/AceDroidX/frp-Android) — Android 平台 frp 客户端
+
+### 替代方案对比
+
+- [anderspitman/awesome-tunneling](https://github.com/anderspitman/awesome-tunneling) — Ngrok / Cloudflare Tunnel / Tailscale 等替代方案大全
+
 ## 许可证
 
 [MIT](./LICENSE)。
