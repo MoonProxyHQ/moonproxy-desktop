@@ -369,6 +369,7 @@ async function onSave() {
   font-size: 12px;
   color: hsl(var(--muted-foreground));
   font-weight: 500;
+  white-space: nowrap;
 }
 .proxy-card {
   background-color: hsl(var(--muted) / 0.5);
