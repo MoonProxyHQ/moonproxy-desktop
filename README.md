@@ -161,6 +161,7 @@ pnpm tauri build      # 当前平台打包
 - [koho/frpmgr](https://github.com/koho/frpmgr) — Windows 平台 FRP 管理器（C#）
 - [codemonkey-m/FrpClient-Win](https://github.com/codemonkey-m/FrpClient-Win) — frpc Windows GUI 客户端
 - [hidumou/frpc-gui](https://github.com/hidumou/frpc-gui) — 现代化跨平台 frpc GUI
+- [3035936740/FRP-Client-GUI](https://github.com/3035936740/FRP-Client-GUI) — Python 管道调用 frpc 的轻量 GUI
 
 ### FRP 生态互补工具
 
