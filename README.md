@@ -13,7 +13,7 @@
 [![frpc](https://img.shields.io/badge/frpc-v0.69.1-orange)](https://github.com/fatedier/frp)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue)](https://tauri.app)
 
-<a href="https://github.com/MoonProxyHQ/moonproxy-desktop/releases/latest"><img src="https://img.shields.io/github/v/release/MoonProxyHQ/moonproxy-desktop?include_prereleases&style=for-the-badge&label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC&color=2563eb" alt="最新版本"></a>&nbsp;<a href="https://github.com/MoonProxyHQ/moonproxy-desktop/releases/latest"><img src="https://img.shields.io/badge/%E6%9C%88%E7%A5%9E%E4%BB%A3%E7%90%86-%E7%AB%8B%E5%8D%B3%E4%B8%8B%E8%BD%BD-2563eb?style=for-the-badge&logo=github&logoColor=white" alt="立即下载"></a>
+<a href="https://github.com/MoonProxyHQ/moonproxy-desktop/releases/latest"><img src="https://img.shields.io/github/v/release/MoonProxyHQ/moonproxy-desktop?include_prereleases&style=for-the-badge&label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC&color=2563eb" alt="最新版本"></a>&nbsp;<a href="https://github.com/MoonProxyHQ/moonproxy-desktop/releases/latest"><img src="https://img.shields.io/badge/%E6%9C%88%E7%A5%9E%E4%BB%A3%E7%90%86-%E7%AB%8B%E5%8D%B3%E4%B8%8B%E8%BD%BD-2563eb?style=for-the-badge&logo=github&logoColor=white" alt="立即下载"></a>&nbsp;<a href="https://github.com/MoonProxyHQ/moonproxy-desktop/stargazers"><img src="https://img.shields.io/badge/%E2%AD%90-Star%20MoonProxy-facc15?style=for-the-badge&logo=github&logoColor=white" alt="Star MoonProxy"></a>
 
 <br/>
 
@@ -176,6 +176,18 @@ pnpm tauri build      # 当前平台打包
 ## 许可证
 
 [MIT](./LICENSE)。
+
+---
+
+## ⭐ 支持这个项目
+
+如果 MoonProxy 帮到了你，请考虑给一个 **[Star](https://github.com/MoonProxyHQ/moonproxy-desktop/stargazers)** ⭐
+
+你的 Star 是这个项目持续维护和改进的唯一动力。每一颗星都让更多需要 FRP 图形化客户端的人能找到它。
+
+- 发现了 Bug？[提 Issue](https://github.com/MoonProxyHQ/moonproxy-desktop/issues)
+- 有想法或问题？[来 Discussions](https://github.com/MoonProxyHQ/moonproxy-desktop/discussions)
+- 想贡献代码？[阅读贡献指南](./CONTRIBUTING.md)
 
 ---
 

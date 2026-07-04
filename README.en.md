@@ -201,6 +201,18 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 
 ---
 
+## ⭐ Support This Project
+
+If MoonProxy helped you, please consider giving it a **[Star](https://github.com/MoonProxyHQ/moonproxy-desktop/stargazers)** ⭐
+
+Stars are the only reward for maintaining this project — each one helps more people who need a GUI client for FRP discover it.
+
+- Found a bug? [Open an Issue](https://github.com/MoonProxyHQ/moonproxy-desktop/issues)
+- Have ideas or questions? [Join Discussions](https://github.com/MoonProxyHQ/moonproxy-desktop/discussions)
+- Want to contribute? [Read the Contributing Guide](./CONTRIBUTING.md)
+
+---
+
 > This project is independent from [fatedier/frp](https://github.com/fatedier/frp).
 > frp's releases and licensing remain with the upstream project;
 > MoonProxy is a desktop client only.
