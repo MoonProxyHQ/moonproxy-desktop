@@ -18,7 +18,7 @@ fetched and verified), please **do not** open a public issue.
 
 - **Preferred channel**: GitHub
   [private security advisory](https://github.com/MoonProxyHQ/moonproxy-desktop/security/advisories/new).
-- **Email** (fallback): `security@moonproxy.app` (PGP key on request).
+- **Email** (fallback): `moonproxyhq@outlook.com` (PGP key on request).
 
 Please include:
 
