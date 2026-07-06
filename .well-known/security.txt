@@ -2,7 +2,7 @@
 # Served at the GitHub Pages static path equivalent. For the repository itself,
 # the canonical location is /SECURITY.md (GitHub renders the "Security" tab from it).
 
-Contact: mailto:security@moonproxy.app
+Contact: mailto:moonproxyhq@outlook.com
 Contact: https://github.com/MoonProxyHQ/moonproxy-desktop/security/advisories/new
 Expires: 2027-12-31T23:59:59Z
 Preferred-Languages: zh-CN, en

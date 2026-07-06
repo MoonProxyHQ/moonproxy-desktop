@@ -13,7 +13,7 @@
 [![frpc](https://img.shields.io/badge/frpc-v0.69.1-orange)](https://github.com/fatedier/frp)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue)](https://tauri.app)
 
-<a href="https://github.com/MoonProxyHQ/moonproxy-desktop/releases/latest"><img src="https://img.shields.io/github/v/release/MoonProxyHQ/moonproxy-desktop?include_prereleases&style=for-the-badge&label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC&color=2563eb" alt="最新版本"></a>&nbsp;<a href="https://github.com/MoonProxyHQ/moonproxy-desktop/releases/latest"><img src="https://img.shields.io/badge/%E6%9C%88%E7%A5%9E%E4%BB%A3%E7%90%86-%E7%AB%8B%E5%8D%B3%E4%B8%8B%E8%BD%BD-2563eb?style=for-the-badge&logo=github&logoColor=white" alt="立即下载"></a>
+<a href="https://github.com/MoonProxyHQ/moonproxy-desktop/releases/latest"><img src="https://img.shields.io/github/v/release/MoonProxyHQ/moonproxy-desktop?include_prereleases&style=for-the-badge&label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC&color=2563eb" alt="最新版本"></a>&nbsp;<a href="https://github.com/MoonProxyHQ/moonproxy-desktop/releases/latest"><img src="https://img.shields.io/badge/%E6%9C%88%E7%A5%9E%E4%BB%A3%E7%90%86-%E7%AB%8B%E5%8D%B3%E4%B8%8B%E8%BD%BD-2563eb?style=for-the-badge&logo=github&logoColor=white" alt="立即下载"></a>&nbsp;<a href="https://github.com/MoonProxyHQ/moonproxy-desktop/stargazers"><img src="https://img.shields.io/badge/%E2%AD%90-Star%20MoonProxy-facc15?style=for-the-badge&logo=github&logoColor=white" alt="Star MoonProxy"></a>
 
 <br/>
 
@@ -151,9 +151,43 @@ pnpm tauri build      # 当前平台打包
 | 💬 问题反馈与讨论 | [GitHub Issues](https://github.com/MoonProxyHQ/moonproxy-desktop/issues) · [Discussions](https://github.com/MoonProxyHQ/moonproxy-desktop/discussions) |
 | 🛠 开发协作文档 | [AGENTS.md](./AGENTS.md) |
 
+## 相关项目
+
+以下是与 MoonProxy 同属 FRP / 内网穿透生态的项目，按"互补 vs 同类"分组：
+
+### 同类 FRP GUI 客户端
+
+- [luckjiawei/frpc-desktop](https://github.com/luckjiawei/frpc-desktop) — 跨平台 FRP 桌面客户端（Flutter），同样定位
+- [koho/frpmgr](https://github.com/koho/frpmgr) — Windows 平台 FRP 管理器（C#）
+- [codemonkey-m/FrpClient-Win](https://github.com/codemonkey-m/FrpClient-Win) — frpc Windows GUI 客户端
+- [hidumou/frpc-gui](https://github.com/hidumou/frpc-gui) — 现代化跨平台 frpc GUI
+- [3035936740/FRP-Client-GUI](https://github.com/3035936740/FRP-Client-GUI) — Python 管道调用 frpc 的轻量 GUI
+
+### FRP 生态互补工具
+
+- [fatedier/frp](https://github.com/fatedier/frp) — FRP 协议本体（MoonProxy 的引擎）
+- [VaalaCat/frp-panel](https://github.com/VaalaCat/frp-panel) — 多节点 frp web 管理面板
+- [AceDroidX/frp-Android](https://github.com/AceDroidX/frp-Android) — Android 平台 frp 客户端
+
+### 替代方案对比
+
+- [anderspitman/awesome-tunneling](https://github.com/anderspitman/awesome-tunneling) — Ngrok / Cloudflare Tunnel / Tailscale 等替代方案大全
+
 ## 许可证
 
 [MIT](./LICENSE)。
+
+---
+
+## ⭐ 支持这个项目
+
+如果 MoonProxy 帮到了你，请考虑给一个 **[Star](https://github.com/MoonProxyHQ/moonproxy-desktop/stargazers)** ⭐
+
+你的 Star 是这个项目持续维护和改进的唯一动力。每一颗星都让更多需要 FRP 图形化客户端的人能找到它。
+
+- 发现了 Bug？[提 Issue](https://github.com/MoonProxyHQ/moonproxy-desktop/issues)
+- 有想法或问题？[来 Discussions](https://github.com/MoonProxyHQ/moonproxy-desktop/discussions)
+- 想贡献代码？[阅读贡献指南](./CONTRIBUTING.md)
 
 ---
 

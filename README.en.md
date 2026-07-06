@@ -173,9 +173,43 @@ pnpm tauri build      # production build for current platform
 | 💬 Issues & discussions | [GitHub Issues](https://github.com/MoonProxyHQ/moonproxy-desktop/issues) · [Discussions](https://github.com/MoonProxyHQ/moonproxy-desktop/discussions) |
 | 🛠 Dev collaboration doc | [AGENTS.md](./AGENTS.md) |
 
+## Related Projects
+
+Projects in the FRP / intranet-penetration ecosystem, grouped by category:
+
+### FRP GUI Clients
+
+- [luckjiawei/frpc-desktop](https://github.com/luckjiawei/frpc-desktop) — Cross-platform FRP desktop client (Flutter)
+- [koho/frpmgr](https://github.com/koho/frpmgr) — Windows FRP manager (C#)
+- [codemonkey-m/FrpClient-Win](https://github.com/codemonkey-m/FrpClient-Win) — frpc Windows GUI client
+- [hidumou/frpc-gui](https://github.com/hidumou/frpc-gui) — Modern cross-platform frpc GUI
+- [3035936740/FRP-Client-GUI](https://github.com/3035936740/FRP-Client-GUI) — Lightweight Python frpc GUI
+
+### Complementary Tools
+
+- [fatedier/frp](https://github.com/fatedier/frp) — The FRP protocol itself (MoonProxy's engine)
+- [VaalaCat/frp-panel](https://github.com/VaalaCat/frp-panel) — Multi-node frp web management panel
+- [AceDroidX/frp-Android](https://github.com/AceDroidX/frp-Android) — Android frp client
+
+### Alternatives
+
+- [anderspitman/awesome-tunneling](https://github.com/anderspitman/awesome-tunneling) — Curated list of tunneling alternatives (Ngrok / Cloudflare Tunnel / Tailscale)
+
 ## License
 
 [MIT](./LICENSE).
+
+---
+
+## ⭐ Support This Project
+
+If MoonProxy helped you, please consider giving it a **[Star](https://github.com/MoonProxyHQ/moonproxy-desktop/stargazers)** ⭐
+
+Stars are the only reward for maintaining this project — each one helps more people who need a GUI client for FRP discover it.
+
+- Found a bug? [Open an Issue](https://github.com/MoonProxyHQ/moonproxy-desktop/issues)
+- Have ideas or questions? [Join Discussions](https://github.com/MoonProxyHQ/moonproxy-desktop/discussions)
+- Want to contribute? [Read the Contributing Guide](./CONTRIBUTING.md)
 
 ---
 
