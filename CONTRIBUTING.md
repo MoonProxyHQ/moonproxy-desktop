@@ -158,7 +158,7 @@ pnpm tauri signer generate -w ~/.tauri/moonproxy-desktop.key
 
 - **改产品定位 / 平台 / 安装包命名**：必须同步 `README.md`、`README.en.md`、`llm.txt`、`.well-known/llm.txt` 四处文案。
 - **新增 GitHub Topic**：通过仓库 Settings → Topics 添加（不在代码里），topics 影响 GitHub 站内搜索权重。
-- **社交预览图**：1200×630，放到仓库根目录 `social-preview.png` 并在 GitHub Settings → Social preview 上传同一张。
+- **社交预览图**：2560×1280，放到 `.github/social-preview.png` 并在 GitHub Settings → Social preview 上传同一张。
 - **不要在 `llm.txt` 里塞营销话术**：保持事实性、可被 LLM 直接引用的紧凑陈述。
 
 ### 校验

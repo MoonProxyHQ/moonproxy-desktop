@@ -5,11 +5,11 @@ GitHub 在分享仓库链接到社交媒体 / 聊天工具时，会展示一张 
 
 ## 命名与位置
 
-文件名固定为 `social-preview.png`，放在仓库**根目录**：
+文件名固定为 `social-preview.png`，放在 `.github/`：
 
 ```
 moonproxy-desktop/
-└── social-preview.png   ← 1200×630，≤ 1MB，PNG / JPG
+└── .github/social-preview.png   ← 2560×1280，≤ 1MB，PNG
 ```
 
 > GitHub 官方文档：<https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/customizing-your-repositorys-social-media-preview>
@@ -33,13 +33,13 @@ moonproxy-desktop/
 
 ## 当前状态
 
-- [ ] 待设计：`social-preview.png`（1200×630）
+- [x] 已落地：`.github/social-preview.png`（2560×1280）
 - 临时方案：GitHub 仓库设置中可手动上传一张图作为社交预览
   （Settings → Social preview → Edit → Upload），无需提交到仓库
 
 ## 后续
 
 设计完成后：
-1. 将 `social-preview.png` 放到仓库根目录
+1. 将 `social-preview.png` 放到 `.github/`
 2. 在 GitHub 仓库 Settings → Social preview 上传同一张图
 3. 更新本文档状态勾选项
