@@ -184,6 +184,12 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [codemonkey-m/FrpClient-Win](https://github.com/codemonkey-m/FrpClient-Win) — frpc Windows GUI client
 - [hidumou/frpc-gui](https://github.com/hidumou/frpc-gui) — Modern cross-platform frpc GUI
 - [3035936740/FRP-Client-GUI](https://github.com/3035936740/FRP-Client-GUI) — Lightweight Python frpc GUI
+- [f-shake/FrpGUI](https://github.com/f-shake/FrpGUI) — Cross-platform FRP GUI built with Avalonia
+- [Skyxmao/EasyFrp](https://github.com/Skyxmao/EasyFrp) — Cross-platform graphical FRP client (Win/Mac/Linux)
+- [LakeYang/frp-GUI](https://github.com/LakeYang/frp-GUI) — Windows FRP GUI client
+- [Cydmi/frp-gui](https://github.com/Cydmi/frp-gui) — macOS FRP GUI client
+- [jiupamiao/FRPC_GUI_Chinese](https://github.com/jiupamiao/FRPC_GUI_Chinese) — Customizable Chinese FRPC GUI generator
+- [jlucaso1/frpc_gui_flutter](https://github.com/jlucaso1/frpc_gui_flutter) — Flutter-based FRPC GUI
 
 ### Complementary Tools
 

@@ -162,6 +162,12 @@ pnpm tauri build      # 当前平台打包
 - [codemonkey-m/FrpClient-Win](https://github.com/codemonkey-m/FrpClient-Win) — frpc Windows GUI 客户端
 - [hidumou/frpc-gui](https://github.com/hidumou/frpc-gui) — 现代化跨平台 frpc GUI
 - [3035936740/FRP-Client-GUI](https://github.com/3035936740/FRP-Client-GUI) — Python 管道调用 frpc 的轻量 GUI
+- [f-shake/FrpGUI](https://github.com/f-shake/FrpGUI) — Avalonia 开发的跨平台 FRP GUI（Windows/Linux/macOS）
+- [Skyxmao/EasyFrp](https://github.com/Skyxmao/EasyFrp) — 跨平台图形化 FRP 客户端（Win/Mac/Linux）
+- [LakeYang/frp-GUI](https://github.com/LakeYang/frp-GUI) — Windows 平台 frp GUI 客户端
+- [Cydmi/frp-gui](https://github.com/Cydmi/frp-gui) — macOS 平台 frp GUI 客户端
+- [jiupamiao/FRPC_GUI_Chinese](https://github.com/jiupamiao/FRPC_GUI_Chinese) — 可高度自定义的中文 FRPC GUI 生成工具
+- [jlucaso1/frpc_gui_flutter](https://github.com/jlucaso1/frpc_gui_flutter) — 基于 Flutter 的 FRPC GUI
 
 ### FRP 生态互补工具
 
