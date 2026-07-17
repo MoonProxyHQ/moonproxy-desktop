@@ -169,6 +169,7 @@ pnpm tauri build      # 当前平台打包
 - [jiupamiao/FRPC_GUI_Chinese](https://github.com/jiupamiao/FRPC_GUI_Chinese) — 可高度自定义的中文 FRPC GUI 生成工具
 - [jlucaso1/frpc_gui_flutter](https://github.com/jlucaso1/frpc_gui_flutter) — 基于 Flutter 的 FRPC GUI
 - [marvinli001/frpc-gui-client](https://github.com/marvinli001/frpc-gui-client) — 一键式 FRP 内网穿透客户端（Electron），多源服务器列表
+- [jamiu99/frp-desktop](https://github.com/jamiu99/frp-desktop) — 跨平台 FRP 图形化客户端 + frps dashboard 查看器（Tauri 2 + Vue 3）
 
 ### FRP 生态互补工具
 
