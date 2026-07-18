@@ -176,6 +176,7 @@ pnpm tauri build      # 当前平台打包
 - [fatedier/frp](https://github.com/fatedier/frp) — FRP 协议本体（MoonProxy 的引擎）
 - [VaalaCat/frp-panel](https://github.com/VaalaCat/frp-panel) — 多节点 frp web 管理面板
 - [AceDroidX/frp-Android](https://github.com/AceDroidX/frp-Android) — Android 平台 frp 客户端
+- [CHERWING/CHERWIN_FRPC](https://github.com/CHERWING/CHERWIN_FRPC) — Android（KernelSU / Magisk）高性能 FRP 客户端，内置 WebUI
 
 ### 替代方案对比
 
