@@ -177,6 +177,8 @@ pnpm tauri build      # 当前平台打包
 - [VaalaCat/frp-panel](https://github.com/VaalaCat/frp-panel) — 多节点 frp web 管理面板
 - [AceDroidX/frp-Android](https://github.com/AceDroidX/frp-Android) — Android 平台 frp 客户端
 - [CHERWING/CHERWIN_FRPC](https://github.com/CHERWING/CHERWIN_FRPC) — Android（KernelSU / Magisk）高性能 FRP 客户端，内置 WebUI
+- [chenjia404/p2ptunnel](https://github.com/chenjia404/p2ptunnel) — P2P（点对点）模式的内网穿透工具，TCP/UDP 直连免服务器
+- [Poseidon-fan/Gung](https://github.com/Poseidon-fan/Gung) — 嵌入式场景的内网穿透工具（支持多协议栈 + Python 扩展）
 
 ### 替代方案对比
 

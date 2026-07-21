@@ -196,6 +196,8 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [fatedier/frp](https://github.com/fatedier/frp) — The FRP protocol itself (MoonProxy's engine)
 - [VaalaCat/frp-panel](https://github.com/VaalaCat/frp-panel) — Multi-node frp web management panel
 - [AceDroidX/frp-Android](https://github.com/AceDroidX/frp-Android) — Android frp client
+- [chenjia404/p2ptunnel](https://github.com/chenjia404/p2ptunnel) — P2P (peer-to-peer) intranet penetration tool; TCP/UDP direct connection without a server
+- [Poseidon-fan/Gung](https://github.com/Poseidon-fan/Gung) — Embedded intranet penetration tool with multi-protocol stack and Python extensions
 
 ### Alternatives
 
