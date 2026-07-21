@@ -198,6 +198,8 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [AceDroidX/frp-Android](https://github.com/AceDroidX/frp-Android) — Android frp client
 - [chenjia404/p2ptunnel](https://github.com/chenjia404/p2ptunnel) — P2P (peer-to-peer) intranet penetration tool; TCP/UDP direct connection without a server
 - [Poseidon-fan/Gung](https://github.com/Poseidon-fan/Gung) — Embedded intranet penetration tool with multi-protocol stack and Python extensions
+- [zero-rp/ops](https://github.com/zero-rp/ops) — Lightweight, high-performance intranet penetration proxy server with web admin UI
+- [editso/fuso](https://github.com/editso/fuso) — Small/fast/stable intranet penetration & port-forwarding tool with multi-connection, cascading proxies, and transport encryption
 
 ### Alternatives
 

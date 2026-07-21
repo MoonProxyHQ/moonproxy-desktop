@@ -179,6 +179,8 @@ pnpm tauri build      # 当前平台打包
 - [CHERWING/CHERWIN_FRPC](https://github.com/CHERWING/CHERWIN_FRPC) — Android（KernelSU / Magisk）高性能 FRP 客户端，内置 WebUI
 - [chenjia404/p2ptunnel](https://github.com/chenjia404/p2ptunnel) — P2P（点对点）模式的内网穿透工具，TCP/UDP 直连免服务器
 - [Poseidon-fan/Gung](https://github.com/Poseidon-fan/Gung) — 嵌入式场景的内网穿透工具（支持多协议栈 + Python 扩展）
+- [zero-rp/ops](https://github.com/zero-rp/ops) — 轻量级、高性能内网穿透代理服务器（Web 管理端）
+- [editso/fuso](https://github.com/editso/fuso) — 小巧/快速/稳定的内网穿透与端口转发工具（多连接/级联代理/传输加密）
 
 ### 替代方案对比
 
