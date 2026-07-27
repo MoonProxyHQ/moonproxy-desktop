@@ -200,6 +200,7 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [Poseidon-fan/Gung](https://github.com/Poseidon-fan/Gung) — Embedded intranet penetration tool with multi-protocol stack and Python extensions
 - [zero-rp/ops](https://github.com/zero-rp/ops) — Lightweight, high-performance intranet penetration proxy server with web admin UI
 - [editso/fuso](https://github.com/editso/fuso) — Small/fast/stable intranet penetration & port-forwarding tool with multi-connection, cascading proxies, and transport encryption
+- [XHLiang0/frpc-console](https://git.whitetop.xyz/lxh2875931338/frpc-console) — Lightweight Linux server-side FRP management (SQLite + Vue CDN + watchdog, 34MB RAM)
 
 ### Alternatives
 

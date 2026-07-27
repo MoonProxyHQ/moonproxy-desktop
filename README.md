@@ -181,6 +181,7 @@ pnpm tauri build      # 当前平台打包
 - [Poseidon-fan/Gung](https://github.com/Poseidon-fan/Gung) — 嵌入式场景的内网穿透工具（支持多协议栈 + Python 扩展）
 - [zero-rp/ops](https://github.com/zero-rp/ops) — 轻量级、高性能内网穿透代理服务器（Web 管理端）
 - [editso/fuso](https://github.com/editso/fuso) — 小巧/快速/稳定的内网穿透与端口转发工具（多连接/级联代理/传输加密）
+- [XHLiang0/frpc-console](https://git.whitetop.xyz/lxh2875931338/frpc-console) — Linux 服务端轻量 FRP 管理（SQLite + Vue CDN + watchdog 保活，34MB 内存）
 
 ### 替代方案对比
 
