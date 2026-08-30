@@ -190,6 +190,10 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [Cydmi/frp-gui](https://github.com/Cydmi/frp-gui) — macOS FRP GUI client
 - [jiupamiao/FRPC_GUI_Chinese](https://github.com/jiupamiao/FRPC_GUI_Chinese) — Customizable Chinese FRPC GUI generator
 - [jlucaso1/frpc_gui_flutter](https://github.com/jlucaso1/frpc_gui_flutter) — Flutter-based FRPC GUI
+- [marvinli001/frpc-gui-client](https://github.com/marvinli001/frpc-gui-client) — One-click FRP intranet-penetration client (Electron) with multi-source server list
+- [jamiu99/frp-desktop](https://github.com/jamiu99/frp-desktop) — Cross-platform graphical FRP client + frps dashboard viewer (Tauri 2 + Vue 3)
+- [ccy-max/frpc-gui](https://github.com/ccy-max/frpc-gui) — FRP desktop management app (Tauri v2 + Vue 3)
+- [sakura-ice/FrpGUI](https://github.com/sakura-ice/FrpGUI) — Cross-platform frpc desktop GUI in Go; single binary, low dependencies
 
 ### Complementary Tools
 

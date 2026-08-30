@@ -170,6 +170,8 @@ pnpm tauri build      # 当前平台打包
 - [jlucaso1/frpc_gui_flutter](https://github.com/jlucaso1/frpc_gui_flutter) — 基于 Flutter 的 FRPC GUI
 - [marvinli001/frpc-gui-client](https://github.com/marvinli001/frpc-gui-client) — 一键式 FRP 内网穿透客户端（Electron），多源服务器列表
 - [jamiu99/frp-desktop](https://github.com/jamiu99/frp-desktop) — 跨平台 FRP 图形化客户端 + frps dashboard 查看器（Tauri 2 + Vue 3）
+- [ccy-max/frpc-gui](https://github.com/ccy-max/frpc-gui) — FRP 内网穿透桌面管理应用（Tauri v2 + Vue 3）
+- [sakura-ice/FrpGUI](https://github.com/sakura-ice/FrpGUI) — 基于 Go 的跨平台 frpc 桌面图形前端，单二进制、低依赖
 
 ### FRP 生态互补工具
 
