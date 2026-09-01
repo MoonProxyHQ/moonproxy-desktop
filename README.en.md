@@ -194,6 +194,7 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [jamiu99/frp-desktop](https://github.com/jamiu99/frp-desktop) — Cross-platform graphical FRP client + frps dashboard viewer (Tauri 2 + Vue 3)
 - [ccy-max/frpc-gui](https://github.com/ccy-max/frpc-gui) — FRP desktop management app (Tauri v2 + Vue 3)
 - [sakura-ice/FrpGUI](https://github.com/sakura-ice/FrpGUI) — Cross-platform frpc desktop GUI in Go; single binary, low dependencies
+- [xiaoyi-0324/FRP-GUI](https://github.com/xiaoyi-0324/FRP-GUI) — Cross-platform FRP GUI client (Windows / macOS) with custom relay servers and real-time logs
 
 ### Complementary Tools
 
@@ -205,6 +206,8 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [zero-rp/ops](https://github.com/zero-rp/ops) — Lightweight, high-performance intranet penetration proxy server with web admin UI
 - [editso/fuso](https://github.com/editso/fuso) — Small/fast/stable intranet penetration & port-forwarding tool with multi-connection, cascading proxies, and transport encryption
 - [XHLiang0/frpc-console](https://git.whitetop.xyz/lxh2875931338/frpc-console) — Lightweight Linux server-side FRP management (SQLite + Vue CDN + watchdog, 34MB RAM)
+- [han-xi-ya/hubkit](https://github.com/han-xi-ya/hubkit) — Desktop developer network toolbox (Go + Wails v3) with multi-instance frpc sandbox management and LAN diagnostics
+- [atanzhen/frpc-web](https://github.com/atanzhen/frpc-web) — Web-based frpc management panel (Python) for remote server-side management
 
 ### Alternatives
 

@@ -172,6 +172,7 @@ pnpm tauri build      # 当前平台打包
 - [jamiu99/frp-desktop](https://github.com/jamiu99/frp-desktop) — 跨平台 FRP 图形化客户端 + frps dashboard 查看器（Tauri 2 + Vue 3）
 - [ccy-max/frpc-gui](https://github.com/ccy-max/frpc-gui) — FRP 内网穿透桌面管理应用（Tauri v2 + Vue 3）
 - [sakura-ice/FrpGUI](https://github.com/sakura-ice/FrpGUI) — 基于 Go 的跨平台 frpc 桌面图形前端，单二进制、低依赖
+- [xiaoyi-0324/FRP-GUI](https://github.com/xiaoyi-0324/FRP-GUI) — 跨平台 FRP GUI 客户端（Windows / macOS），自定义服务器 + 实时日志
 
 ### FRP 生态互补工具
 
@@ -184,6 +185,8 @@ pnpm tauri build      # 当前平台打包
 - [zero-rp/ops](https://github.com/zero-rp/ops) — 轻量级、高性能内网穿透代理服务器（Web 管理端）
 - [editso/fuso](https://github.com/editso/fuso) — 小巧/快速/稳定的内网穿透与端口转发工具（多连接/级联代理/传输加密）
 - [XHLiang0/frpc-console](https://git.whitetop.xyz/lxh2875931338/frpc-console) — Linux 服务端轻量 FRP 管理（SQLite + Vue CDN + watchdog 保活，34MB 内存）
+- [han-xi-ya/hubkit](https://github.com/han-xi-ya/hubkit) — 桌面开发者网络工具箱（Go + Wails v3），内置多实例 frpc 沙箱管理与局域网诊断
+- [atanzhen/frpc-web](https://github.com/atanzhen/frpc-web) — frpc 可视化 Web 管理面板（Python），适合服务端远程管理
 
 ### 替代方案对比
 
