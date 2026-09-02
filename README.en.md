@@ -208,6 +208,8 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [XHLiang0/frpc-console](https://git.whitetop.xyz/lxh2875931338/frpc-console) — Lightweight Linux server-side FRP management (SQLite + Vue CDN + watchdog, 34MB RAM)
 - [han-xi-ya/hubkit](https://github.com/han-xi-ya/hubkit) — Desktop developer network toolbox (Go + Wails v3) with multi-instance frpc sandbox management and LAN diagnostics
 - [atanzhen/frpc-web](https://github.com/atanzhen/frpc-web) — Web-based frpc management panel (Python) for remote server-side management
+- [myki-jim/frp-sh](https://github.com/myki-jim/frp-sh) — Social P2P hole-punching tunnel (pure Rust) with room-based UDP punching and relay fallback
+- [zihan620-network/Penetration](https://github.com/zihan620-network/Penetration) — Self-built intranet penetration system (Python, non-frp) with TCP/HTTP/HTTPS tunnels and a web admin console
 
 ### Alternatives
 

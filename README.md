@@ -187,6 +187,8 @@ pnpm tauri build      # 当前平台打包
 - [XHLiang0/frpc-console](https://git.whitetop.xyz/lxh2875931338/frpc-console) — Linux 服务端轻量 FRP 管理（SQLite + Vue CDN + watchdog 保活，34MB 内存）
 - [han-xi-ya/hubkit](https://github.com/han-xi-ya/hubkit) — 桌面开发者网络工具箱（Go + Wails v3），内置多实例 frpc 沙箱管理与局域网诊断
 - [atanzhen/frpc-web](https://github.com/atanzhen/frpc-web) — frpc 可视化 Web 管理面板（Python），适合服务端远程管理
+- [myki-jim/frp-sh](https://github.com/myki-jim/frp-sh) — 社交化 P2P 打洞隧道（纯 Rust），房间制 UDP 打洞 + 中继回退
+- [zihan620-network/Penetration](https://github.com/zihan620-network/Penetration) — 自研内网穿透系统（Python，非 frp 系），TCP/HTTP/HTTPS 隧道 + Web 管理后台
 
 ### 替代方案对比
 
