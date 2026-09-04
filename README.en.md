@@ -210,6 +210,9 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [atanzhen/frpc-web](https://github.com/atanzhen/frpc-web) — Web-based frpc management panel (Python) for remote server-side management
 - [myki-jim/frp-sh](https://github.com/myki-jim/frp-sh) — Social P2P hole-punching tunnel (pure Rust) with room-based UDP punching and relay fallback
 - [zihan620-network/Penetration](https://github.com/zihan620-network/Penetration) — Self-built intranet penetration system (Python, non-frp) with TCP/HTTP/HTTPS tunnels and a web admin console
+- [chenow9/umbra](https://github.com/chenow9/umbra) — Self-hosted TCP/UDP gateway for services behind NAT (Go), with centralized config, source-IP authorization, and ticket-based visitor tunnels
+- [manmox/Frp-Manager](https://github.com/manmox/Frp-Manager) — Multi-profile frp-panel tunnel management console (Electron + React) for accessing multiple intranet penetration channels from one workstation
+- [zhaoxuya520/MeshLAN](https://github.com/zhaoxuya520/MeshLAN) — Self-hosted P2P-first virtual LAN built on Nebula (Go), with service sharing and multi-relay
 
 ### Alternatives
 
