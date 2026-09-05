@@ -192,6 +192,8 @@ pnpm tauri build      # 当前平台打包
 - [chenow9/umbra](https://github.com/chenow9/umbra) — 自托管 NAT 后服务 TCP/UDP 网关（Go），集中配置 + 源 IP 授权 + 基于票据的访客隧道
 - [manmox/Frp-Manager](https://github.com/manmox/Frp-Manager) — frp-panel 隧道多档案可视化管理台（Electron + React），一台工作机接入多家内网穿透通道
 - [zhaoxuya520/MeshLAN](https://github.com/zhaoxuya520/MeshLAN) — 自托管 P2P 优先虚拟局域网（Go，基于 Nebula），服务共享 + 多中继
+- [lantunnel/lantunnel](https://github.com/lantunnel/lantunnel) — P2P 优先的私有网络组网工具（Rust），端到端加密访问自有局域网
+- [easyai-page/ssh-tunnel](https://github.com/easyai-page/ssh-tunnel) — 跨平台 SSH 端口转发桌面工具（Rust），本地/远程/SOCKS5 转发 + 系统托盘
 
 ### 替代方案对比
 

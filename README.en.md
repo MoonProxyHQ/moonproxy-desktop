@@ -213,6 +213,8 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [chenow9/umbra](https://github.com/chenow9/umbra) — Self-hosted TCP/UDP gateway for services behind NAT (Go), with centralized config, source-IP authorization, and ticket-based visitor tunnels
 - [manmox/Frp-Manager](https://github.com/manmox/Frp-Manager) — Multi-profile frp-panel tunnel management console (Electron + React) for accessing multiple intranet penetration channels from one workstation
 - [zhaoxuya520/MeshLAN](https://github.com/zhaoxuya520/MeshLAN) — Self-hosted P2P-first virtual LAN built on Nebula (Go), with service sharing and multi-relay
+- [lantunnel/lantunnel](https://github.com/lantunnel/lantunnel) — P2P-first private networking tool (Rust) for end-to-end encrypted access to your own LANs
+- [easyai-page/ssh-tunnel](https://github.com/easyai-page/ssh-tunnel) — Cross-platform SSH port-forwarding desktop app (Rust) with local/remote/SOCKS5 forwards and system tray
 
 ### Alternatives
 
