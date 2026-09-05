@@ -189,7 +189,7 @@ pnpm tauri build      # 当前平台打包
 - [atanzhen/frpc-web](https://github.com/atanzhen/frpc-web) — frpc 可视化 Web 管理面板（Python），适合服务端远程管理
 - [myki-jim/frp-sh](https://github.com/myki-jim/frp-sh) — 社交化 P2P 打洞隧道（纯 Rust），房间制 UDP 打洞 + 中继回退
 - [zihan620-network/Penetration](https://github.com/zihan620-network/Penetration) — 自研内网穿透系统（Python，非 frp 系），TCP/HTTP/HTTPS 隧道 + Web 管理后台
-- [chenow9/umbra](https://github.com/chenow9/umbra) — 自托管 NAT 后服务 TCP/UDP 网关（Go），集中配置 + 源 IP 授权 + 工单访客隧道
+- [chenow9/umbra](https://github.com/chenow9/umbra) — 自托管 NAT 后服务 TCP/UDP 网关（Go），集中配置 + 源 IP 授权 + 基于票据的访客隧道
 - [manmox/Frp-Manager](https://github.com/manmox/Frp-Manager) — frp-panel 隧道多档案可视化管理台（Electron + React），一台工作机接入多家内网穿透通道
 - [zhaoxuya520/MeshLAN](https://github.com/zhaoxuya520/MeshLAN) — 自托管 P2P 优先虚拟局域网（Go，基于 Nebula），服务共享 + 多中继
 
