@@ -215,6 +215,7 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [zhaoxuya520/MeshLAN](https://github.com/zhaoxuya520/MeshLAN) — Self-hosted P2P-first virtual LAN built on Nebula (Go), with service sharing and multi-relay
 - [lantunnel/lantunnel](https://github.com/lantunnel/lantunnel) — P2P-first private networking tool (Rust) for end-to-end encrypted access to your own LANs
 - [easyai-page/ssh-tunnel](https://github.com/easyai-page/ssh-tunnel) — Cross-platform SSH port-forwarding desktop app (Rust) with local/remote/SOCKS5 forwards and system tray
+- [Wy2926/nodelane-tunneld](https://github.com/Wy2926/nodelane-tunneld) — Self-hostable tunnel service (Go, built on official frp) exposing local HTTP/TCP/UDP services with one command
 
 ### Alternatives
 

@@ -194,6 +194,7 @@ pnpm tauri build      # 当前平台打包
 - [zhaoxuya520/MeshLAN](https://github.com/zhaoxuya520/MeshLAN) — 自托管 P2P 优先虚拟局域网（Go，基于 Nebula），服务共享 + 多中继
 - [lantunnel/lantunnel](https://github.com/lantunnel/lantunnel) — P2P 优先的私有网络组网工具（Rust），端到端加密访问自有局域网
 - [easyai-page/ssh-tunnel](https://github.com/easyai-page/ssh-tunnel) — 跨平台 SSH 端口转发桌面工具（Rust），本地/远程/SOCKS5 转发 + 系统托盘
+- [Wy2926/nodelane-tunneld](https://github.com/Wy2926/nodelane-tunneld) — 自托管隧道服务（Go，基于官方 frp），一条命令暴露本地 HTTP/TCP/UDP 服务
 
 ### 替代方案对比
 
