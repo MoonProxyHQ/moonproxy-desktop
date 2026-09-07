@@ -216,6 +216,8 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [lantunnel/lantunnel](https://github.com/lantunnel/lantunnel) — P2P-first private networking tool (Rust) for end-to-end encrypted access to your own LANs
 - [easyai-page/ssh-tunnel](https://github.com/easyai-page/ssh-tunnel) — Cross-platform SSH port-forwarding desktop app (Rust) with local/remote/SOCKS5 forwards and system tray
 - [Wy2926/nodelane-tunneld](https://github.com/Wy2926/nodelane-tunneld) — Self-hostable tunnel service (Go, built on official frp) exposing local HTTP/TCP/UDP services with one command
+- [stilleshan/frpc](https://github.com/stilleshan/frpc) — One-click install scripts & Docker images for the vanilla frpc (Synology NAS / Linux servers, x86 + ARM)
+- [newbietan/FRP-ALL-IN-ONE](https://github.com/newbietan/FRP-ALL-IN-ONE) — Web-based FRP management system: FRPS config, one-click client deployment, port mappings & traffic monitoring
 
 ### Alternatives
 

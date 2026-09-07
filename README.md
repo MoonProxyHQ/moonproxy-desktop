@@ -195,6 +195,8 @@ pnpm tauri build      # 当前平台打包
 - [lantunnel/lantunnel](https://github.com/lantunnel/lantunnel) — P2P 优先的私有网络组网工具（Rust），端到端加密访问自有局域网
 - [easyai-page/ssh-tunnel](https://github.com/easyai-page/ssh-tunnel) — 跨平台 SSH 端口转发桌面工具（Rust），本地/远程/SOCKS5 转发 + 系统托盘
 - [Wy2926/nodelane-tunneld](https://github.com/Wy2926/nodelane-tunneld) — 自托管隧道服务（Go，基于官方 frp），一条命令暴露本地 HTTP/TCP/UDP 服务
+- [stilleshan/frpc](https://github.com/stilleshan/frpc) — 原版 frpc 一键安装卸载脚本与 Docker 镜像（支持群晖 NAS / Linux 服务器，X86 + ARM）
+- [newbietan/FRP-ALL-IN-ONE](https://github.com/newbietan/FRP-ALL-IN-ONE) — Web 端 FRP 内网穿透管理系统：FRPS 配置 + 客户端一键部署 + 端口映射 + 流量监控
 
 ### 替代方案对比
 
