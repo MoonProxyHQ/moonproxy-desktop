@@ -197,6 +197,7 @@ pnpm tauri build      # 当前平台打包
 - [Wy2926/nodelane-tunneld](https://github.com/Wy2926/nodelane-tunneld) — 自托管隧道服务（Go，基于官方 frp），一条命令暴露本地 HTTP/TCP/UDP 服务
 - [stilleshan/frpc](https://github.com/stilleshan/frpc) — 原版 frpc 一键安装卸载脚本与 Docker 镜像（支持群晖 NAS / Linux 服务器，X86 + ARM）
 - [newbietan/FRP-ALL-IN-ONE](https://github.com/newbietan/FRP-ALL-IN-ONE) — Web 端 FRP 内网穿透管理系统：FRPS 配置 + 客户端一键部署 + 端口映射 + 流量监控
+- [rh666666/FrpcManage_v3](https://github.com/rh666666/FrpcManage_v3) — Windows 桌面 frpc 多配置管理器（Tauri 2），可视化编辑 TOML 配置 + 多实例进程监控与实时日志
 
 ### 替代方案对比
 

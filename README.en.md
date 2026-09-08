@@ -218,6 +218,7 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [Wy2926/nodelane-tunneld](https://github.com/Wy2926/nodelane-tunneld) — Self-hostable tunnel service (Go, built on official frp) exposing local HTTP/TCP/UDP services with one command
 - [stilleshan/frpc](https://github.com/stilleshan/frpc) — One-click install scripts & Docker images for the vanilla frpc (Synology NAS / Linux servers, x86 + ARM)
 - [newbietan/FRP-ALL-IN-ONE](https://github.com/newbietan/FRP-ALL-IN-ONE) — Web-based FRP management system: FRPS config, one-click client deployment, port mappings & traffic monitoring
+- [rh666666/FrpcManage_v3](https://github.com/rh666666/FrpcManage_v3) — Windows desktop frpc multi-config manager (Tauri 2) with visual TOML editing, multi-instance process control & live logs
 
 ### Alternatives
 
