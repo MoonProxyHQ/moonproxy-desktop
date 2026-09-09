@@ -198,6 +198,8 @@ pnpm tauri build      # 当前平台打包
 - [stilleshan/frpc](https://github.com/stilleshan/frpc) — 原版 frpc 一键安装卸载脚本与 Docker 镜像（支持群晖 NAS / Linux 服务器，X86 + ARM）
 - [newbietan/FRP-ALL-IN-ONE](https://github.com/newbietan/FRP-ALL-IN-ONE) — Web 端 FRP 内网穿透管理系统：FRPS 配置 + 客户端一键部署 + 端口映射 + 流量监控
 - [rh666666/FrpcManage_v3](https://github.com/rh666666/FrpcManage_v3) — Windows 桌面 frpc 多配置管理器（Tauri 2），可视化编辑 TOML 配置 + 多实例进程监控与实时日志
+- [XY2006DATE/TunnelX](https://github.com/XY2006DATE/TunnelX) — 自托管 TCP/UDP/HTTP NAT 穿透工具（Go），自带 Web 与桌面双控制台
+- [single9/erbridge](https://github.com/single9/erbridge) — 低延迟 TCP/UDP 端口转发器（Rust），内置反向连接 NAT 穿透模式与实时流量面板
 
 ### 替代方案对比
 
