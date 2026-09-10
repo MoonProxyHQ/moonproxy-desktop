@@ -200,6 +200,7 @@ pnpm tauri build      # 当前平台打包
 - [rh666666/FrpcManage_v3](https://github.com/rh666666/FrpcManage_v3) — Windows 桌面 frpc 多配置管理器（Tauri 2），可视化编辑 TOML 配置 + 多实例进程监控与实时日志
 - [XY2006DATE/TunnelX](https://github.com/XY2006DATE/TunnelX) — 自托管 TCP/UDP/HTTP NAT 穿透工具（Go），自带 Web 与桌面双控制台
 - [single9/erbridge](https://github.com/single9/erbridge) — 低延迟 TCP/UDP 端口转发器（Rust），内置反向连接 NAT 穿透模式与实时流量面板
+- [holyping/UDRoute](https://github.com/holyping/UDRoute) — .NET 10 AOT 高性能 UDP P2P 打洞与中继隧道工具（C#），支持 KCP 可靠传输与动态鉴权
 
 ### 替代方案对比
 
