@@ -173,6 +173,7 @@ pnpm tauri build      # 当前平台打包
 - [ccy-max/frpc-gui](https://github.com/ccy-max/frpc-gui) — FRP 内网穿透桌面管理应用（Tauri v2 + Vue 3）
 - [sakura-ice/FrpGUI](https://github.com/sakura-ice/FrpGUI) — 基于 Go 的跨平台 frpc 桌面图形前端，单二进制、低依赖
 - [xiaoyi-0324/FRP-GUI](https://github.com/xiaoyi-0324/FRP-GUI) — 跨平台 FRP GUI 客户端（Windows / macOS），自定义服务器 + 实时日志
+- [Ryz-z/frpwgui](https://github.com/Ryz-z/frpwgui) — Windows 全中文 FRP 图形管理器（C#），frps/frpc 双端管理 + 一键安装包与系统服务
 
 ### FRP 生态互补工具
 
@@ -201,6 +202,7 @@ pnpm tauri build      # 当前平台打包
 - [XY2006DATE/TunnelX](https://github.com/XY2006DATE/TunnelX) — 自托管 TCP/UDP/HTTP NAT 穿透工具（Go），自带 Web 与桌面双控制台
 - [single9/erbridge](https://github.com/single9/erbridge) — 低延迟 TCP/UDP 端口转发器（Rust），内置反向连接 NAT 穿透模式与实时流量面板
 - [holyping/UDRoute](https://github.com/holyping/UDRoute) — .NET 10 AOT 高性能 UDP P2P 打洞与中继隧道工具（C#），支持 KCP 可靠传输与动态鉴权
+- [clockclock1/nexusgate](https://github.com/clockclock1/nexusgate) — 高性能 P2P 优先内网穿透与 Overlay 网络（Rust），Control/Data 分离 + React 管理控制台
 
 ### 替代方案对比
 

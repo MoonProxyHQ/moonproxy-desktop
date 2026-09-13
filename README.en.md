@@ -195,6 +195,7 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [ccy-max/frpc-gui](https://github.com/ccy-max/frpc-gui) — FRP desktop management app (Tauri v2 + Vue 3)
 - [sakura-ice/FrpGUI](https://github.com/sakura-ice/FrpGUI) — Cross-platform frpc desktop GUI in Go; single binary, low dependencies
 - [xiaoyi-0324/FRP-GUI](https://github.com/xiaoyi-0324/FRP-GUI) — Cross-platform FRP GUI client (Windows / macOS) with custom relay servers and real-time logs
+- [Ryz-z/frpwgui](https://github.com/Ryz-z/frpwgui) — Chinese-language Windows FRP manager (C#) with frps/frpc dual control, one-click installer & Windows service
 
 ### Complementary Tools
 
@@ -222,6 +223,7 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [XY2006DATE/TunnelX](https://github.com/XY2006DATE/TunnelX) — Self-hosted TCP/UDP/HTTP NAT traversal tool (Go) with both web and desktop dashboards
 - [single9/erbridge](https://github.com/single9/erbridge) — Low-latency TCP/UDP port forwarder (Rust) with built-in reverse-connection NAT traversal mode and a live traffic panel
 - [holyping/UDRoute](https://github.com/holyping/UDRoute) — High-performance .NET 10 AOT UDP P2P hole-punching & relay tunnel tool (C#) with KCP reliable transport and dynamic auth
+- [clockclock1/nexusgate](https://github.com/clockclock1/nexusgate) — High-performance P2P-first intranet penetration & overlay network (Rust) with Control/Data separation and a React admin console
 
 ### Alternatives
 
