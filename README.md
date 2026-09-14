@@ -202,6 +202,7 @@ pnpm tauri build      # 当前平台打包
 - [XY2006DATE/TunnelX](https://github.com/XY2006DATE/TunnelX) — 自托管 TCP/UDP/HTTP NAT 穿透工具（Go），自带 Web 与桌面双控制台
 - [single9/erbridge](https://github.com/single9/erbridge) — 低延迟 TCP/UDP 端口转发器（Rust），内置反向连接 NAT 穿透模式与实时流量面板
 - [holyping/UDRoute](https://github.com/holyping/UDRoute) — .NET 10 AOT 高性能 UDP P2P 打洞与中继隧道工具（C#），支持 KCP 可靠传输与动态鉴权
+- [atanzhen/frps-web](https://github.com/atanzhen/frps-web) — Frps 服务端可视化 Web 面板（Python），在线安装 frps + 内置多版本一键部署
 - [clockclock1/nexusgate](https://github.com/clockclock1/nexusgate) — 高性能 P2P 优先内网穿透与 Overlay 网络（Rust），Control/Data 分离 + React 管理控制台
 
 ### 替代方案对比

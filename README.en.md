@@ -222,7 +222,8 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [rh666666/FrpcManage_v3](https://github.com/rh666666/FrpcManage_v3) — Windows desktop frpc multi-config manager (Tauri 2) with visual TOML editing, multi-instance process control & live logs
 - [XY2006DATE/TunnelX](https://github.com/XY2006DATE/TunnelX) — Self-hosted TCP/UDP/HTTP NAT traversal tool (Go) with both web and desktop dashboards
 - [single9/erbridge](https://github.com/single9/erbridge) — Low-latency TCP/UDP port forwarder (Rust) with built-in reverse-connection NAT traversal mode and a live traffic panel
-- [holyping/UDRoute](https://github.com/holyping/UDRoute) — High-performance .NET 10 AOT UDP P2P hole-punching & relay tunnel tool (C#) with KCP reliable transport and dynamic auth
+- [holyping/UDRoute](https://github.com/holyping/UDRoute) — High-performance UDP P2P hole-punching & relay tunnel tool in .NET 10 AOT (C#), with KCP reliable transport and dynamic auth
+- [atanzhen/frps-web](https://github.com/atanzhen/frps-web) — Frps server visualization web panel (Python) for online frps installation with multi-version one-click deployment
 - [clockclock1/nexusgate](https://github.com/clockclock1/nexusgate) — High-performance P2P-first intranet penetration & overlay network (Rust) with Control/Data separation and a React admin console
 
 ### Alternatives
