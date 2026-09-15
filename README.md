@@ -174,6 +174,7 @@ pnpm tauri build      # 当前平台打包
 - [sakura-ice/FrpGUI](https://github.com/sakura-ice/FrpGUI) — 基于 Go 的跨平台 frpc 桌面图形前端，单二进制、低依赖
 - [xiaoyi-0324/FRP-GUI](https://github.com/xiaoyi-0324/FRP-GUI) — 跨平台 FRP GUI 客户端（Windows / macOS），自定义服务器 + 实时日志
 - [Ryz-z/frpwgui](https://github.com/Ryz-z/frpwgui) — Windows 全中文 FRP 图形管理器（C#），frps/frpc 双端管理 + 一键安装包与系统服务
+- [wosledon/frpc-app](https://github.com/wosledon/frpc-app) — 简洁的 frpc 跨平台图形化管理工具（Tauri v2 + React 19 + Rust），便携化 data/ 目录部署 + 深浅双主题 + 中英双语
 
 ### FRP 生态互补工具
 

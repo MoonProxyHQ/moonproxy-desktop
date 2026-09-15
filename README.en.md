@@ -196,6 +196,7 @@ Projects in the FRP / intranet-penetration ecosystem, grouped by category:
 - [sakura-ice/FrpGUI](https://github.com/sakura-ice/FrpGUI) — Cross-platform frpc desktop GUI in Go; single binary, low dependencies
 - [xiaoyi-0324/FRP-GUI](https://github.com/xiaoyi-0324/FRP-GUI) — Cross-platform FRP GUI client (Windows / macOS) with custom relay servers and real-time logs
 - [Ryz-z/frpwgui](https://github.com/Ryz-z/frpwgui) — Chinese-language Windows FRP manager (C#) with frps/frpc dual control, one-click installer & Windows service
+- [wosledon/frpc-app](https://github.com/wosledon/frpc-app) — Minimal cross-platform frpc GUI manager (Tauri v2 + React 19 + Rust) with portable data/ deployment, dual light/dark themes, and zh/en i18n
 
 ### Complementary Tools
 
