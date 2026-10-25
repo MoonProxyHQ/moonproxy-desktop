@@ -150,6 +150,7 @@ pnpm tauri build      # 当前平台打包
 | 📖 贡献指南 | [CONTRIBUTING.md](./CONTRIBUTING.md) |
 | 💬 问题反馈与讨论 | [GitHub Issues](https://github.com/MoonProxyHQ/moonproxy-desktop/issues) · [Discussions](https://github.com/MoonProxyHQ/moonproxy-desktop/discussions) |
 | 🛠 开发协作文档 | [AGENTS.md](./AGENTS.md) |
+| 📝 技术笔记 | [dev.to 技术专栏](https://dev.to/chenxxpro)（TCP 中转层流量计量、Tauri sidecar 打包、Rust 子进程生命周期等实现细节） |
 
 ## 相关项目
 
