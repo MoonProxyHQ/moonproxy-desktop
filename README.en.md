@@ -172,6 +172,7 @@ pnpm tauri build      # production build for current platform
 | 📖 Contributing guide | [CONTRIBUTING.md](./CONTRIBUTING.md) |
 | 💬 Issues & discussions | [GitHub Issues](https://github.com/MoonProxyHQ/moonproxy-desktop/issues) · [Discussions](https://github.com/MoonProxyHQ/moonproxy-desktop/discussions) |
 | 🛠 Dev collaboration doc | [AGENTS.md](./AGENTS.md) |
+| 📝 Engineering notes | [dev.to](https://dev.to/chenxxpro) (TCP relay traffic metering, Tauri sidecar packaging, Rust subprocess lifecycle) |
 
 ## Related Projects
 
